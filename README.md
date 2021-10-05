@@ -41,3 +41,8 @@ Look in the example.py file.
 ### without wrapper
 
 Look at test2.py. Make sure to use 1000000 baud rate. Make sure to use the right control table adresses for the AX-12A dynamixel.
+
+## Documentation
+
+[Control table description](https://emanual.robotis.com/docs/en/dxl/ax/ax-12a/#control-table-description)
+[Python API reference](https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_sdk/api_reference/python/python_porthandler/#python)
