@@ -47,6 +47,7 @@ else:
         return ch
 
 from dynamixel_sdk import *                    # Uses Dynamixel SDK library
+import time
 
 # Control table address
 ADDR_AX_TORQUE_ENABLE       = 24               # Control table address is different in Dynamixel model
@@ -55,8 +56,8 @@ ADDR_AX_PRESENT_POSITION    = 36
 ADDR_AX_MOVING              = 46
 
 # Data Byte Length
-LEN_AX_GOAL_POSITION        = 1
-LEN_AX_PRESENT_POSITION     = 1
+LEN_AX_GOAL_POSITION        = 2
+LEN_AX_PRESENT_POSITION     = 2
 LEN_AX_MOVING               = 1
 
 # Protocol version
@@ -88,6 +89,7 @@ portHandler = PortHandler(DEVICENAME)
 # Get methods and members of Protocol1PacketHandler or Protocol2PacketHandler
 packetHandler = PacketHandler(PROTOCOL_VERSION)
 
+
 # Initialize GroupBulkRead instace for Present Position
 groupBulkRead = GroupBulkRead(portHandler, packetHandler)
 
@@ -110,6 +112,10 @@ else:
     getch()
     quit()
 
+packetHandler.reboot(portHandler, DXL1_ID)
+packetHandler.reboot(portHandler, DXL2_ID)
+
+time.sleep(2)
 
 # Enable Dynamixel#1 Torque
 dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, DXL1_ID, ADDR_AX_TORQUE_ENABLE, TORQUE_ENABLE)
