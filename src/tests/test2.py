@@ -69,7 +69,7 @@ DXL_MAXIMUM_POSITION_VALUE  = 1023            # and this value (note that the Dy
 DXL_MOVING_STATUS_THRESHOLD = 20                # Dynamixel moving status threshold
 
 index = 0
-dxl_goal_position = [DXL_MINIMUM_POSITION_VALUE, DXL_MAXIMUM_POSITION_VALUE]         # Goal position
+dxl_goal_position = [0, 50, 0, 100, 0, 200, 0, 300]         # Goal position
 
 
 # Initialize PortHandler instance
@@ -111,9 +111,9 @@ else:
     print("Dynamixel has been successfully connected")
 
 while 1:
-    print("Press any key to continue! (or press ESC to quit!)")
-    if getch() == chr(0x1b):
-        break
+    #print("Press any key to continue! (or press ESC to quit!)")
+    #if getch() == chr(0x1b):
+    #    break
 
     # Write goal position
     dxl_comm_result, dxl_error = packetHandler.write2ByteTxRx(portHandler, DXL_ID, ADDR_AX_GOAL_POSITION, dxl_goal_position[index])
@@ -136,10 +136,7 @@ while 1:
             break
 
     # Change goal position
-    if index == 0:
-        index = 1
-    else:
-        index = 0
+    index = (index + 1)%8
 
 
 # Disable Dynamixel Torque

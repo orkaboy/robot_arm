@@ -1,3 +1,7 @@
+import sys
+  
+# setting path
+sys.path.append('../')
 from Ax12 import Ax12
 
 # e.g 'COM3' windows or '/dev/ttyUSB0' for Linux
@@ -9,9 +13,10 @@ Ax12.BAUDRATE = 1_000_000
 Ax12.connect()
 
 # create AX12 instance with ID 10 
-motor_id = 2
+motor_id = 1
 my_dxl = Ax12(motor_id)  
 my_dxl.set_id(my_dxl.id)
+my_dxl.enable_torque()
 my_dxl.set_moving_speed(100)
 
 
