@@ -19,7 +19,6 @@ if __name__ == "__main__":
     while True:
         print("Position of dxl ID: %d is %d " %
               (robot_arm.motors[0].id, robot_arm.motors[0].get_present_position()))
-        # desired angle input
         input_pos = int(input("goal pos: "))
         robot_arm.motors[0].set_goal_position(input_pos)
         while abs(input_pos - robot_arm.motors[0].get_present_position()) > 2:

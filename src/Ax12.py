@@ -86,7 +86,7 @@ class Ax12:
         reg_data, dxl_comm_result, dxl_error = Ax12.packetHandler.read1ByteTxRx(
             Ax12.portHandler, self.id, reg_num)
         Ax12.check_error(dxl_comm_result, dxl_error)
-        return reg_data
+        return reg_data, dxl_comm_result, dxl_error
 
     def set_register2(self, reg_num, reg_value):
         dxl_comm_result, dxl_error = Ax12.packetHandler.write2ByteTxRx(
