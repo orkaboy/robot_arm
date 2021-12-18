@@ -1,8 +1,7 @@
-function port_num = open_port(devicename, baudrate)
-
+function port_num = open_port(devicename)
+baudrate = 1000000;
 port_num = portHandler(devicename);
 packetHandler();
-dxl_comm_result = COMM_TX_FAIL;
 
 if (openPort(port_num))
     fprintf('Succeeded to open the port!\n');

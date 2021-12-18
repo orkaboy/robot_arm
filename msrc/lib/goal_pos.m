@@ -6,5 +6,5 @@ if(pos > 1023)
 elseif(pos < 0)
     pos = 0;
 end
-    write2ByteTxRx(port_num, PROTOCOL_VERSION, deviceID, ADDR_AX_GOAL_POSITION_L, pos);
+    write2ByteTxOnly(port_num, 1.0, deviceID, 30, pos);
 end

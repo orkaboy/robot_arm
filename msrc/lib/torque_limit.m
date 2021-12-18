@@ -6,5 +6,5 @@ if(torque_lim > 1023)
 elseif(torque_lim < 0)
     torque_lim = 0;
 end
-    write2ByteTxRx(port_num, PROTOCOL_VERSION, deviceID, ADDR_AX_TORQUE_LIMIT_L, torque_lim);
+    write2ByteTxRx(port_num, 1.0, deviceID, 34, torque_lim);
 end
