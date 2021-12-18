@@ -1,25 +1,32 @@
 clc;
+addpath(genpath("3Dmodels"));
 dhparams = [0   	-pi/2   0.0785	0;
             0.16474   	 0      0       pi/2;
             0.16474	 0      0		0;
             0.0145	pi/2	-0.049		0;
-            0.029   pi/2	0.049   	0;
+            0.0145   pi/2	0.049   	0;
             0       0       0.021       0];
 
 robot = rigidBodyTree;
-
 body1 = rigidBody('b1');
+addVisual(body1,"Mesh",'first_joint.stl');
 jnt1 = rigidBodyJoint('jnt1','revolute');
 body2 = rigidBody('b2');
+addVisual(body2,"Mesh",'first_arm.stl');
 jnt2 = rigidBodyJoint('jnt2','revolute');
 jnt2.HomePosition = -pi/2;
 body3 = rigidBody('b3');
+addVisual(body3,"Mesh",'second_arm.stl');
 jnt3 = rigidBodyJoint('jnt3','revolute');
 jnt3.HomePosition = pi/2;
 body4 = rigidBody('b4');
+addVisual(body4,"Mesh","first_connector.stl");
 jnt4 = rigidBodyJoint('jnt4','revolute');
+jnt4.HomePosition = pi/2;
 body5 = rigidBody('b5');
+addVisual(body5,"Mesh","second_connector.stl");
 jnt5 = rigidBodyJoint('jnt5','revolute');
+jnt5.HomePosition = pi/2;
 tool = rigidBody('b6');
 jnt6 = rigidBodyJoint('jnt6','revolute');
 setFixedTransform(jnt1,dhparams(1,:),'dh');
@@ -41,5 +48,7 @@ addBody(robot,body3,'b2');
 addBody(robot,body4,'b3');
 addBody(robot,body5,'b4');
 addBody(robot,tool,'b5');
-%showdetails(robot)
-show(robot)
+config = homeConfiguration(robot);
+tic
+show(robot,config)
+toc
