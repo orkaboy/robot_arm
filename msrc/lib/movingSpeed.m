@@ -1,4 +1,4 @@
-function [] = movingSpeed(portNum,speed)
+function [] = movingSpeed(portNum,deviceID,speed)
 %UNTITLED7 Summary of this function goes here
 %   Detailed explanation goes here
 if(speed > 1023)

@@ -1,4 +1,4 @@
-function portNum = openPort(deviceName)
+function portNum = setupPort(deviceName)
 baudrate = 1000000;
 portNum = portHandler(deviceName);
 packetHandler();

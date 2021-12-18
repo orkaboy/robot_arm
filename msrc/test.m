@@ -74,14 +74,14 @@ for i = 0:5
             fprintf('%s\n', getRxPacketError(PROTOCOL_VERSION, dxl_error));
         end
 end
-for j = 1:200
+for j = 1:600
 clc
 for i = 0:5
   pos(j,i+1) = read2ByteTxRx(port_num, PROTOCOL_VERSION, i, ADDR_POS);
   disp('Motor with device id ' + string(i) + ': '+ string(pos(j,i+1)));
 end
 
-%pause(1/20);
+pause(1/3);
 end
 
 disp("Get rect");
