@@ -4,7 +4,7 @@ function [] = goToHome(portNum)
         pause(0.1);
     	startPos(i+1) = read2ByteTxRx(portNum, 1.0, i, 36);
     end
-    sT = toc
+    sT = toc;
     while toc < sT + 7
        moveJoint(portNum,0,startPos(1),home(1),sT +0,sT +7);
        moveJoint(portNum,1,startPos(2),home(2),sT +1,sT +3);
