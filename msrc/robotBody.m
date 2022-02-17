@@ -6,7 +6,8 @@ dhparams = [0   	-pi/2   0.0785	0;
             0.0145	pi/2	-0.049		0;
             0.0145   pi/2	0.049   	0;
             0       0       0.021       0];
-
+               
+        
 robot = rigidBodyTree;
 body1 = rigidBody('b1');
 addVisual(body1,"Mesh",'first_joint.stl');
@@ -49,6 +50,45 @@ addBody(robot,body4,'b3');
 addBody(robot,body5,'b4');
 addBody(robot,tool,'b5');
 config = homeConfiguration(robot);
-tic
+
 show(robot,config)
-toc
+hold on
+
+pointA = [0.2,0.2,0.2];
+pointB = [-0.2,0.2,0.2];
+
+%plot3(pointA,'o')
+%plot3(pointB,'o')
+
+tic
+invKinModel = generalizedInverseKinematics('RigidBodyTree',robot,'ConstraintInputs',{'cartesian','position'});
+boundingBox = constraintCartesianBounds('b5');
+boundingBox.Bounds = [-Inf Inf; -Inf Inf; 0.05 Inf];
+targetConstraint = constraintPositionTarget('b5');
+targetConstraint.TargetPosition = [0.2 0.2 0.2];
+targetConstraint.PositionTolerance = 0.005;
+q(1,:) = homeConfiguration(robot);
+
+fps = 60;
+trajTime = 5;
+for k = 2:fps*trajTime
+    %getPoint
+    currPoint = pointA + (pointB-pointA)*k/fps/trajTime;
+    %invkin
+    targetConstraint.TargetPosition = currPoint;
+    [q(k,:),solInfo] = invKinModel(q(k-1,:),boundingBox,targetConstraint);
+    
+    %moveJoints
+end
+disp("Hej");
+framerate = 15;
+r = rateControl(framerate);
+
+hold on
+for i = 1:10:size(q,1)
+    
+    config = q(i,:);
+    show(robot, config, 'PreservePlot', false);
+    waitfor(r);
+end
+hold off
