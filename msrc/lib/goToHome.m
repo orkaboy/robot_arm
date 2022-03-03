@@ -1,5 +1,7 @@
 function [] = goToHome(portNum)
     home = [512 525 530 520 512 512];
+%        home = [512 525 530 520 512 512];
+
     for i = 0:5
         pause(0.1);
     	startPos(i+1) = read2ByteTxRx(portNum, 1.0, i, 36);

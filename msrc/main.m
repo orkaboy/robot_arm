@@ -1,10 +1,10 @@
-clc; clear;
+clc; 
 libName = setupLib();
-portNum = setupPort('COM7');
+portNum = setupPort('COM3');
 setupMotors(portNum);
 tic
 
-%goToHome(portNum);
+goToHome(portNum);
 pause(1);
 tic
 while(toc < 3)
