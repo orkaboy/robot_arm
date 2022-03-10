@@ -1,6 +1,6 @@
 clc; 
 libName = setupLib();
-portNum = setupPort('COM3');
+portNum = setupPort('COM7');
 setupMotors(portNum);
 tic
 

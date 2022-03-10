@@ -1,12 +1,12 @@
-clc;
+clc;clear;
 addpath(genpath("3Dmodels/LowPoly"));
-dhparams = [0   	-pi/2   0.0785	0;
+dhparams = [0   	-pi/2   0	0;
             0.16474   	 0      0       pi/2;
             0.16474	 0      0		0;
             0.0145	pi/2	-0.049		0;
             0.0145   pi/2	0.049   	0;
             0       0       0.021       0];
-               
+        %0.0785       
         
 robot = rigidBodyTree;
 body1 = rigidBody('b1');
@@ -54,21 +54,22 @@ config = homeConfiguration(robot);
 show(robot,config)
 hold on
 
-pointA = [0.2,0.2,0.2];
+endEffT = getTransform(robot,config,'b1','b5')
+pointA = [-endEffT(2,4), - endEffT(1,4), endEffT(3,4)];
 
-pointB = [-0.2,0.2,0.2];
+pointB = pointA + [0,0.3,0];
 
 tic
 invKinModel = generalizedInverseKinematics('RigidBodyTree',robot,'ConstraintInputs',{'cartesian','position'});
 boundingBox = constraintCartesianBounds('b5');
-boundingBox.Bounds = [-Inf Inf; -Inf Inf; 0.05 Inf];
+boundingBox.Bounds = [-Inf Inf; -Inf Inf; 0.01 Inf];
 targetConstraint = constraintPositionTarget('b5');
-targetConstraint.TargetPosition = [0.2 0.2 0.2];
-targetConstraint.PositionTolerance = 0.005;
+targetConstraint.TargetPosition = pointA;
+targetConstraint.PositionTolerance = 0.001;
 q(1,:) = homeConfiguration(robot);
 
 fps = 60;
-trajTime = 5;
+trajTime = 1;
 for k = 2:fps*trajTime
     %getPoint
     currPoint = pointA + (pointB-pointA)*k/fps/trajTime;
