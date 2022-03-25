@@ -22,6 +22,7 @@ public:
     void SetJointMode(float min, float max) override;
 
     void JointSet(float angle) override;
+    void WheelSet(float speed) override;
 private:
     auto Write1ByteTxRx(uint32_t addr, uint8_t value) -> int;
     auto Write2ByteTxRx(uint32_t addr, uint16_t value) -> int;

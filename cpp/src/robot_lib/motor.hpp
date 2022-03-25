@@ -9,6 +9,8 @@ public:
     virtual void SetJointMode(float min, float max) = 0;
 
     virtual void JointSet(float angle) = 0;
+    // 1.0 = full speed ccw, -1.0 = full speed cw
+    virtual void WheelSet(float speed) = 0;
 private:
 
 };

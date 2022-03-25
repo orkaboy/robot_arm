@@ -52,6 +52,8 @@ namespace Constants {
     constexpr float    AngleMax             =  5*M_PI/6;
 
     constexpr size_t   GoalPositionSize     = 2;
+    constexpr uint16_t MaxSpeed             = 1023;
+    constexpr uint16_t CWOffset             = 1024;
 }
 
 
@@ -143,6 +145,25 @@ void AX12A::SyncJointMove(const std::vector<std::pair<AX12A*, float>>& positions
     }
 
     groupSyncWrite.txPacket();
+}
+
+
+// 1.0 = full speed ccw, -1.0 = full speed cw
+void AX12A::WheelSet(float speed) {
+    /* In Wheel mode, servo can move freely using REG::MovingSpeed */
+    /* 0-1023 is move CCW (0 = stop, 1023 = full output) */
+    /* 1024-2047 is move CW (1024 = stop, 2047 = full output) */
+    uint16_t value = 0;
+    if(speed < 0.0) {
+        value = Constants::CWOffset;
+        speed = -speed;
+    }
+    if(speed > 1.0) {
+        speed = 1.0;
+    }
+    value += speed * Constants::MaxSpeed;
+
+    Write2ByteTxRx(REG::MovingSpeed, value);
 }
 
 }
