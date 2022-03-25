@@ -6,12 +6,14 @@ namespace ARC {
 
 class RobotArm {
 public:
-    RobotArm();
+    RobotArm(const std::string& config_file);
 
     auto Init() -> bool;
 private:
-    dynamixel::PortHandler *mPortHandler;
-    dynamixel::PacketHandler *mPacketHandler;
+    std::string mDevice;
+
+    dynamixel::PortHandler *mPortHandler{};
+    dynamixel::PacketHandler *mPacketHandler{};
 };
 
 } // namespace ARC
