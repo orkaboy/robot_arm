@@ -24,25 +24,30 @@ RobotArm::RobotArm(const std::string& config_file) {
         auto tree = ryml::parse_in_arena(ryml::to_csubstr(buffer.str()));
 
         tree["device"] >> mDevice;
+
+        for(auto child : tree["links"].children()) {
+            
+        }
     }
     
     mPortHandler = dynamixel::PortHandler::getPortHandler(mDevice.c_str());
     mPacketHandler = dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
-}
-
-auto RobotArm::Init() -> bool {
 
     if(!mPortHandler->openPort()) {
         fmt::print("Failed to open port {}\n", mDevice);
-        return false;
+        return;
     }
 
     if(!mPortHandler->setBaudRate(BAUDRATE)) {
         fmt::print("Failed to set baudrate to {}\n", BAUDRATE);
-        return false;
+        return;
     }
 
-    return true;
+    mOK = true;
+}
+
+RobotArm::~RobotArm() {
+    mPortHandler->closePort();
 }
 
 } // namespace ARC

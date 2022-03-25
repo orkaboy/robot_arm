@@ -7,13 +7,16 @@ namespace ARC {
 class RobotArm {
 public:
     RobotArm(const std::string& config_file);
+    ~RobotArm();
 
-    auto Init() -> bool;
+    auto IsOK() -> bool { return mOK; };
 private:
     std::string mDevice;
 
     dynamixel::PortHandler *mPortHandler{};
     dynamixel::PacketHandler *mPacketHandler{};
+
+    bool mOK{};
 };
 
 } // namespace ARC

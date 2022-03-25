@@ -21,9 +21,9 @@ auto main(int argc, char* argv[]) -> int {
 	}
 
     ARC::RobotArm arm(config_file);
-    if(!arm.Init()) {
+    if(!arm.IsOK()) {
         fmt::print("Unable to initialize robot arm.\n");
-        return 1;
+        return -1;
     }
 
     return 0;

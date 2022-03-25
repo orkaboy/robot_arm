@@ -1,5 +1,9 @@
 
-add_library(robot_lib robot_lib.cpp)
+add_library(robot_lib
+    robot_lib.cpp
+    motor.cpp
+    ax-12a.cpp
+)
 target_link_libraries(robot_lib
     VENDOR::dxl
     fmt::fmt
