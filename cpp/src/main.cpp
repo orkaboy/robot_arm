@@ -30,6 +30,10 @@ auto main(int argc, char* argv[]) -> int {
     }
 
     // TEMP TODO Set positions
+    // Just for safety, limit speeds
+    fmt::print("Limiting speed to {}%...\n", 0.1 * 100);
+    arm.SetSpeed(0.1);
+
     fmt::print("Moving to origin...\n");
     std::vector<float> origin = {0,0,0,0,0,0};
     arm.SetJoints(origin);

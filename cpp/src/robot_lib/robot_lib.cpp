@@ -102,6 +102,11 @@ auto RobotArm::SetJoints(const std::vector<float>& drivers) -> bool {
     return true;
 }
 
+auto RobotArm::SetSpeed(float speed) -> bool {
+    const auto drivers = std::vector<float>(mJoints.size(), speed);
+    return SetSpeeds(drivers);
+}
+
 auto RobotArm::SetSpeeds(const std::vector<float>& drivers) -> bool {
     if(drivers.size() != mJoints.size()) {
         fmt::print("[RobotArm::SetSpeeds] Size of joints and drivers are not the same!\n");

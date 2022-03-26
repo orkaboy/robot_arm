@@ -15,6 +15,7 @@ public:
     auto SetJoints(const std::vector<float>& drivers) -> bool;
     auto JointsIsDoneMoving(const std::vector<float>& drivers) const -> bool;
 
+    auto SetSpeed(float speed) -> bool;
     auto SetSpeeds(const std::vector<float>& drivers) -> bool;
 private:
     std::string mDevice;
