@@ -16,6 +16,7 @@ public:
     );
 
     static void SyncJointMove(const std::vector<std::pair<AX12A*, float>>& positions);
+    static void SyncWheelMove(const std::vector<std::pair<AX12A*, float>>& speeds);
 
     void Enable(bool enable) override;
     void SetWheelMode() override;
@@ -31,6 +32,7 @@ private:
 
     static auto AngleToPos(float angle) -> uint16_t;
     static auto PosToAngle(uint16_t pos) -> float;
+    static auto SpeedToRaw(float speed) -> uint16_t;
 
     dynamixel::PortHandler *mPortHandler{};
     dynamixel::PacketHandler *mPacketHandler{};

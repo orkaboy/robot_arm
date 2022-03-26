@@ -33,7 +33,7 @@ auto main(int argc, char* argv[]) -> int {
     fmt::print("Moving to origin...\n");
     std::vector<float> origin = {0,0,0,0,0,0};
     arm.SetJoints(origin);
-    while(!arm.IsDoneMoving(origin)) {
+    while(!arm.JointsIsDoneMoving(origin)) {
         using namespace std::chrono_literals;
         std::this_thread::sleep_for(10ms);
         break; //TODO

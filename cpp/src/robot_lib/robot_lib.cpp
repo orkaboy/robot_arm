@@ -102,7 +102,25 @@ auto RobotArm::SetJoints(const std::vector<float>& drivers) -> bool {
     return true;
 }
 
-auto RobotArm::IsDoneMoving(const std::vector<float>& drivers) const -> bool {
+auto RobotArm::SetSpeeds(const std::vector<float>& drivers) -> bool {
+    if(drivers.size() != mJoints.size()) {
+        fmt::print("[RobotArm::SetSpeeds] Size of joints and drivers are not the same!\n");
+        return false;
+    }
+
+    std::vector<std::pair<AX12A*, float>> instructions;
+    for(auto i = 0u; i < mJoints.size(); ++i) {
+        auto j = mJoints[i];
+        auto d = drivers[i];
+        instructions.emplace_back(j, d);
+    }
+
+    AX12A::SyncWheelMove(instructions);
+
+    return true;
+}
+
+auto RobotArm::JointsIsDoneMoving(const std::vector<float>& drivers) const -> bool {
     if(drivers.size() != mJoints.size()) {
         return false;
     }
@@ -110,7 +128,7 @@ auto RobotArm::IsDoneMoving(const std::vector<float>& drivers) const -> bool {
     for(auto i = 0u; i < mJoints.size(); ++i) {
         auto joint = mJoints[i];
         auto goal = drivers[i];
-        if(!joint->IsDoneMoving(goal)) {
+        if(!joint->JointIsDoneMoving(goal)) {
             return false;
         }
     }

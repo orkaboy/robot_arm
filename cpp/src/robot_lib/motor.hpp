@@ -14,7 +14,7 @@ public:
 
     virtual auto JointGet() const -> float = 0;
 
-    bool IsDoneMoving(float goal) const;
+    bool JointIsDoneMoving(float goal) const;
 };
 
 }

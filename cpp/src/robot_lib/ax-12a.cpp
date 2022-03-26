@@ -52,9 +52,11 @@ namespace Constants {
     constexpr float    AngleMin             = -5*M_PI/6;
     constexpr float    AngleMax             =  5*M_PI/6;
 
-    constexpr size_t   GoalPositionSize     = 2;
     constexpr uint16_t MaxSpeed             = 1023;
     constexpr uint16_t CWOffset             = 1024;
+
+    constexpr size_t   GoalPositionSize     = 2;
+    constexpr size_t   MovingSpeedSize      = 2;
 }
 
 
@@ -141,13 +143,13 @@ void AX12A::JointSet(float angle) {
 
 void AX12A::SyncJointMove(const std::vector<std::pair<AX12A*, float>>& positions) {
     if(positions.empty()) {
-        fmt::print("[AX12A::SyncJointMove] positions is empty!\n");
+        fmt::print("[AX12A::SyncJointMove] positions vector is empty!\n");
         return;
     }
 
     if(DEBUG()) {
         // Dry run, don't send instructions to the servos
-        fmt::print("[DEBUG|AX12A] groupSyncWrite: [");
+        fmt::print("[DEBUG|AX12A] groupSyncWrite({}): [", REG::GoalPosition);
         auto i = 0u;
         for(; i < positions.size() - 1; ++i) {
             auto servo = positions[i].first;
@@ -182,10 +184,51 @@ void AX12A::SyncJointMove(const std::vector<std::pair<AX12A*, float>>& positions
     groupSyncWrite.txPacket();
 }
 
+void AX12A::SyncWheelMove(const std::vector<std::pair<AX12A*, float>>& speeds) {
+    if(speeds.empty()) {
+        fmt::print("[AX12A::SyncWheelMove] speeds vector is empty!\n");
+        return;
+    }
+    
+    if(DEBUG()) {
+        // Dry run, don't send instructions to the servos
+        fmt::print("[DEBUG|AX12A] groupSyncWrite({}): [", REG::MovingSpeed);
+        auto i = 0u;
+        for(; i < speeds.size() - 1; ++i) {
+            auto servo = speeds[i].first;
+            auto pos = SpeedToRaw(speeds[i].second);
+            fmt::print("{:03}:{} ", servo->mID, pos);
+        }
+        auto servo = speeds[i].first;
+        auto pos = SpeedToRaw(speeds[i].second);
+        fmt::print("{:03}:{}]\n", servo->mID, pos);
+        return;
+    }
+
+    auto servo = speeds[0].first;
+    dynamixel::GroupSyncWrite groupSyncWrite(
+        servo->mPortHandler,
+        servo->mPacketHandler,
+        REG::MovingSpeed,
+        Constants::MovingSpeedSize
+    );
+
+    uint8_t param_speed[2];
+    for(auto it : speeds) {
+        auto servo = it.first;
+        auto pos = SpeedToRaw(it.second);
+
+        param_speed[0] = DXL_LOBYTE(pos);
+        param_speed[1] = DXL_HIBYTE(pos);
+
+        groupSyncWrite.addParam(servo->mID, param_speed);
+    }
+
+    groupSyncWrite.txPacket();
+}
 
 // 1.0 = full speed ccw, -1.0 = full speed cw
-void AX12A::WheelSet(float speed) {
-    /* In Wheel mode, servo can move freely using REG::MovingSpeed */
+auto AX12A::SpeedToRaw(float speed) -> uint16_t {
     /* 0-1023 is move CCW (0 = stop, 1023 = full output) */
     /* 1024-2047 is move CW (1024 = stop, 2047 = full output) */
     uint16_t value = 0;
@@ -197,7 +240,13 @@ void AX12A::WheelSet(float speed) {
         speed = 1.0;
     }
     value += speed * Constants::MaxSpeed;
+    return value;
+}
 
+// 1.0 = full speed ccw, -1.0 = full speed cw
+void AX12A::WheelSet(float speed) {
+    auto value = SpeedToRaw(speed);
+    /* In Wheel mode, servo can move freely using REG::MovingSpeed */
     Write2ByteTxRx(REG::MovingSpeed, value);
 }
 
