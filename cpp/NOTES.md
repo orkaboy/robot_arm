@@ -1,4 +1,4 @@
-# TODO Robot arm testing
+# Robot arm testing
 
 * Set up odroid system (Ubuntu 16.04 xenial, aarch64)
 * login: odroid odroid
@@ -18,10 +18,14 @@
     * Set Torque mode
     * Can also run free-running, set speed (can rotate freely, but the positional encoders don't work)
 
+## C++ port
+* Set up CW/CCW degrees conversion
+* Set up move-to-origin test app
+* Set up config.yml file
+* Set up a dry-run debug mode
 
 ## TODO next
 
-* Set up CW/CCW degrees conversion
 * Model robot arm limits (IDs 0-5)
 * Test running entire robot arm between limits (limit speed!)
 * Model IK (FABRIK?)
