@@ -1,3 +1,4 @@
+debug: true
 device: "/dev/ttyUSB0"
 links:
   - id: 1

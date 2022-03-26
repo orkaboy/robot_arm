@@ -26,7 +26,7 @@ auto main(int argc, char* argv[]) -> int {
     ARC::RobotArm arm(config_file);
     if(!arm.IsOK()) {
         fmt::print("Unable to initialize robot arm.\n");
-        return -1;
+        //return -1;
     }
 
     // TEMP TODO Set positions
@@ -36,6 +36,7 @@ auto main(int argc, char* argv[]) -> int {
     while(!arm.IsDoneMoving(origin)) {
         using namespace std::chrono_literals;
         std::this_thread::sleep_for(10ms);
+        break; //TODO
     }
     fmt::print("Done! Shutting down...\n");
 

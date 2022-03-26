@@ -1,4 +1,5 @@
 #include "ax-12a.hpp"
+#include "debug.hpp"
 #include <fmt/core.h>
 
 #include <cmath>
@@ -70,20 +71,30 @@ AX12A::AX12A(
     uint16_t dxl_model_number{};
     auto dxl_comm_result = mPacketHandler->ping(mPortHandler, mID, &dxl_model_number, &dxl_error);
     if(dxl_comm_result != COMM_SUCCESS) {
-        fmt::print("{}\n", mPacketHandler->getTxRxResult(dxl_comm_result));
+        fmt::print("[AX12A|ping ID:{:03}] {}\n", mID, mPacketHandler->getTxRxResult(dxl_comm_result));
     } else if(dxl_error != 0) {
-        fmt::print("{}\n", mPacketHandler->getTxRxResult(dxl_error));
+        fmt::print("[AX12A|ping ID:{:03}] {}\n", mID, mPacketHandler->getTxRxResult(dxl_error));
     } else {
-        fmt::print("[ID:{:03}] ping succeeded. Dynamixel model number: {}\n", mID, dxl_model_number);
+        fmt::print("[AX12A|ping ID:{:03}] ping succeeded. Dynamixel model number: {}\n", mID, dxl_model_number);
     }
 }
 
 auto AX12A::Write1ByteTxRx(uint32_t addr, uint8_t value) -> int {
+    if(DEBUG()) {
+        // Dry run, don't send instructions to the servos
+        fmt::print("[DEBUG|AX12A:{:03}] Write1[{}] = {}\n", mID, addr, value);
+        return COMM_SUCCESS;
+    }
     uint8_t dxl_error{};
     return mPacketHandler->write1ByteTxRx(mPortHandler, mID, addr, value, &dxl_error);
 }
 
 auto AX12A::Write2ByteTxRx(uint32_t addr, uint16_t value) -> int {
+    if(DEBUG()) {
+        // Dry run, don't send instructions to the servos
+        fmt::print("[DEBUG|AX12A:{:03}] Write2[{}] = {}\n", mID, addr, value);
+        return COMM_SUCCESS;
+    }
     uint8_t dxl_error{};
     return mPacketHandler->write2ByteTxRx(mPortHandler, mID, addr, value, &dxl_error);
 }
@@ -130,6 +141,22 @@ void AX12A::JointSet(float angle) {
 
 void AX12A::SyncJointMove(const std::vector<std::pair<AX12A*, float>>& positions) {
     if(positions.empty()) {
+        fmt::print("[AX12A::SyncJointMove] positions is empty!\n");
+        return;
+    }
+
+    if(DEBUG()) {
+        // Dry run, don't send instructions to the servos
+        fmt::print("[DEBUG|AX12A] groupSyncWrite: [");
+        auto i = 0u;
+        for(; i < positions.size() - 1; ++i) {
+            auto servo = positions[i].first;
+            auto pos = AngleToPos(positions[i].second);
+            fmt::print("{:03}:{} ", servo->mID, pos);
+        }
+        auto servo = positions[i].first;
+        auto pos = AngleToPos(positions[i].second);
+        fmt::print("{:03}:{}]\n", servo->mID, pos);
         return;
     }
 

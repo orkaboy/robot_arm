@@ -1,6 +1,7 @@
 
 add_library(robot_lib
     robot_lib.cpp
+    debug.cpp
     motor.cpp
     ax-12a.cpp
 )
