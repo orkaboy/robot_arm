@@ -107,6 +107,12 @@ auto AX12A::AngleToPos(float angle) -> uint16_t {
     return Constants::PosMin + (Constants::PosMax - Constants::PosMin) * (angle - Constants::AngleMin) / (Constants::AngleMax - Constants::AngleMin);
 }
 
+auto AX12A::PosToAngle(uint16_t pos) -> float {
+    if(pos < Constants::PosMin) { pos = Constants::PosMin; }
+    if(pos > Constants::PosMax) { pos = Constants::PosMax; }
+    return Constants::AngleMin + (Constants::AngleMax - Constants::AngleMin) * (static_cast<float>(pos) - Constants::PosMin) / (Constants::PosMax - Constants::PosMin);
+}
+
 void AX12A::SetJointMode(float min, float max) {
     /* Servo speed is set with REG::MovingSpeed 0..1023 (0 = max speed) */
     /* Set position with REG::GoalPosition */
@@ -166,6 +172,13 @@ void AX12A::WheelSet(float speed) {
     value += speed * Constants::MaxSpeed;
 
     Write2ByteTxRx(REG::MovingSpeed, value);
+}
+
+auto AX12A::JointGet() const -> float {
+    uint8_t dxl_error{};
+    uint16_t position{};
+    auto dxl_comm_result = mPacketHandler->read2ByteTxRx(mPortHandler, mID, REG::PresentPosition, &position, &dxl_error);
+    return PosToAngle(position);
 }
 
 }

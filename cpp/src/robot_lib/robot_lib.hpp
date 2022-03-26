@@ -12,7 +12,8 @@ public:
 
     auto IsOK() -> bool { return mOK; };
 
-    bool SetJoints(std::vector<float> drivers);
+    auto SetJoints(const std::vector<float>& drivers) -> bool;
+    auto IsDoneMoving(const std::vector<float>& drivers) const -> bool;
 private:
     std::string mDevice;
 

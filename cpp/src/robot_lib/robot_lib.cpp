@@ -18,10 +18,13 @@ RobotArm::RobotArm(const std::string& config_file) {
     mDevice = DEVICENAME;
 
     struct JointConfig {
-        JointConfig(uint32_t id_)
-            : id(id_)
+        JointConfig(uint32_t id_, std::string mode_, float lim_min_, float lim_max_)
+            : id(id_), mode(mode_), lim_min(lim_min_), lim_max(lim_max_)
         {}
         uint32_t id;
+        std::string mode;
+        float lim_min;
+        float lim_max;
     };
     std::vector<JointConfig> joints;
 
@@ -34,8 +37,13 @@ RobotArm::RobotArm(const std::string& config_file) {
         tree["device"] >> mDevice;
         for(auto child : tree["links"].children()) {
             uint32_t id;
+            std::string mode;
+            float lim_min, lim_max;
             child["id"] >> id;
-            joints.emplace_back(id);
+            child["mode"] >> mode;
+            child["lim_min"] >> lim_min;
+            child["lim_max"] >> lim_max;
+            joints.emplace_back(id, mode, lim_min, lim_max);
         }
     }
     
@@ -53,7 +61,13 @@ RobotArm::RobotArm(const std::string& config_file) {
     }
 
     for(auto j : joints) {
-        mJoints.emplace_back(new AX12A(mPortHandler, mPacketHandler, j.id));
+        auto servo = new AX12A(mPortHandler, mPacketHandler, j.id);
+        if(j.mode == "joint") {
+            servo->SetJointMode(j.lim_min, j.lim_max);
+        } else if(j.mode == "wheel") {
+            servo->SetWheelMode(); // TODO set speed limits?
+        }
+        mJoints.push_back(servo);
     }
 
     mOK = true;
@@ -66,7 +80,7 @@ RobotArm::~RobotArm() {
     mPortHandler->closePort();
 }
 
-bool RobotArm::SetJoints(std::vector<float> drivers) {
+auto RobotArm::SetJoints(const std::vector<float>& drivers) -> bool {
     if(drivers.size() != mJoints.size()) {
         return false;
     }
@@ -80,6 +94,21 @@ bool RobotArm::SetJoints(std::vector<float> drivers) {
 
     AX12A::SyncJointMove(instructions);
 
+    return true;
+}
+
+auto RobotArm::IsDoneMoving(const std::vector<float>& drivers) const -> bool {
+    if(drivers.size() != mJoints.size()) {
+        return false;
+    }
+
+    for(auto i = 0u; i < mJoints.size(); ++i) {
+        auto joint = mJoints[i];
+        auto goal = drivers[i];
+        if(!joint->IsDoneMoving(goal)) {
+            return false;
+        }
+    }
     return true;
 }
 

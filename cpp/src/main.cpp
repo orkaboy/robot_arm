@@ -3,6 +3,9 @@
 #include <fmt/core.h>
 #include <unistd.h>
 
+#include <thread>
+#include <chrono>
+
 auto main(int argc, char* argv[]) -> int {
     std::string config_file = "config/config.yml";
 
@@ -25,6 +28,16 @@ auto main(int argc, char* argv[]) -> int {
         fmt::print("Unable to initialize robot arm.\n");
         return -1;
     }
+
+    // TEMP TODO Set positions
+    fmt::print("Moving to origin...\n");
+    std::vector<float> origin = {0,0,0,0,0,0};
+    arm.SetJoints(origin);
+    while(!arm.IsDoneMoving(origin)) {
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(10ms);
+    }
+    fmt::print("Done! Shutting down...\n");
 
     return 0;
 }

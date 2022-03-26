@@ -23,11 +23,14 @@ public:
 
     void JointSet(float angle) override;
     void WheelSet(float speed) override;
+
+    auto JointGet() const -> float override;
 private:
     auto Write1ByteTxRx(uint32_t addr, uint8_t value) -> int;
     auto Write2ByteTxRx(uint32_t addr, uint16_t value) -> int;
 
     static auto AngleToPos(float angle) -> uint16_t;
+    static auto PosToAngle(uint16_t pos) -> float;
 
     dynamixel::PortHandler *mPortHandler{};
     dynamixel::PacketHandler *mPacketHandler{};
