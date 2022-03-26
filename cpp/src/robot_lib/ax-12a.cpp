@@ -98,6 +98,7 @@ void AX12A::SetWheelMode() {
     /* 1024-2047 is move CW (1024 = stop, 2047 = full output) */
     Write2ByteTxRx(REG::CWAngleLimit, 0);
     Write2ByteTxRx(REG::CCWAngleLimit, 0);
+    mWheelMode = true;
 }
 
 auto AX12A::AngleToPos(float angle) -> uint16_t {
@@ -113,6 +114,7 @@ void AX12A::SetJointMode(float min, float max) {
     uint16_t ccw = AngleToPos(max);
     Write2ByteTxRx(REG::CWAngleLimit, cw);
     Write2ByteTxRx(REG::CCWAngleLimit, ccw);
+    mWheelMode = false;
 }
 
 void AX12A::JointSet(float angle) {

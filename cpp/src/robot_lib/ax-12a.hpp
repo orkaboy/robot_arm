@@ -32,6 +32,8 @@ private:
     dynamixel::PortHandler *mPortHandler{};
     dynamixel::PacketHandler *mPacketHandler{};
     uint32_t mID{};
+
+    bool mWheelMode{};
 };
 
 }
