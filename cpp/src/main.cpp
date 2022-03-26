@@ -29,6 +29,8 @@ auto main(int argc, char* argv[]) -> int {
         //return -1;
     }
 
+
+    arm.Enable(true);
     // TEMP TODO Set positions
     // Just for safety, limit speeds
     fmt::print("Limiting speed to {}%...\n", 0.1 * 100);

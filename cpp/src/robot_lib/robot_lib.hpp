@@ -12,6 +12,8 @@ public:
 
     auto IsOK() -> bool { return mOK; };
 
+    void Enable(bool enable);
+
     auto SetJoints(const std::vector<float>& drivers) -> bool;
     auto JointsIsDoneMoving(const std::vector<float>& drivers) const -> bool;
 

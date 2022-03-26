@@ -79,6 +79,7 @@ RobotArm::RobotArm(const std::string& config_file) {
 
 RobotArm::~RobotArm() {
     for(auto j : mJoints) {
+        j->Enable(false);
         delete j;
     }
     mPortHandler->closePort();
@@ -138,6 +139,12 @@ auto RobotArm::JointsIsDoneMoving(const std::vector<float>& drivers) const -> bo
         }
     }
     return true;
+}
+
+void RobotArm::Enable(bool enable) {
+    for(auto j : mJoints) {
+        j->Enable(enable);
+    }
 }
 
 } // namespace ARC
