@@ -1,8 +1,13 @@
 #include "vec.hpp"
 #include <cmath>
 
+#include <fmt/core.h>
+
 namespace ARC {
 
+std::string vec3::str() const {
+    return fmt::format("({} {} {})", x, y, z);
+}
 
 vec3::vec3()
     : x(0.0), y(0.0), z(0.0)
@@ -94,7 +99,7 @@ Real vec3::len() const {
 
 vec3 vec3::norm() const {
     auto magnitude = len();
-    if(magnitude > 0.0f) {
+    if(magnitude > 0.0) {
         auto oneOverMag = 1.0f / magnitude;
         return vec3(x*oneOverMag, y*oneOverMag, z*oneOverMag);
     }
@@ -104,7 +109,7 @@ vec3 vec3::norm() const {
 Real vec3::angle(const vec3& v) const {
     auto dotProd = dot(v);
     auto lenProd = len() * v.len();
-    if(lenProd > 0.0f) {
+    if(lenProd > 0.0) {
         auto cosTheta = dotProd / lenProd;
         return std::acos(cosTheta);
     }
