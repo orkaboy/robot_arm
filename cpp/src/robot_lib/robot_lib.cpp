@@ -9,6 +9,10 @@
 #include <ryml_std.hpp> // optional header. BUT when used, needs to be included BEFORE ryml.hpp
 #include <ryml.hpp>
 
+#include "bezier.hpp"
+
+#include <thread>
+
 namespace ARC {
 
 constexpr auto PROTOCOL_VERSION = 1.0;
@@ -147,18 +151,35 @@ void RobotArm::Enable(bool enable) {
     }
 }
 
-void RobotArm::MoveToPos(const vec3& target) {
-    /* TEMP TODO */
+void RobotArm::MoveToPos(const vec3& target, std::chrono::milliseconds time) {
+    /* TEMP TODO Should be from current pos */
     const auto LIMB_LEN = 0.1; // In m
+    const auto endEff = vec3(0,LIMB_LEN,LIMB_LEN);
     std::vector<FABRIK::Link> links = {
         {vec3(0,0,0), LIMB_LEN}, // Root
         {vec3(0,0,LIMB_LEN), LIMB_LEN},
-        {vec3(0,LIMB_LEN,LIMB_LEN), 0.0} // End effector
+        {endEff, 0.0} // End effector
     };
+    // TEMP TODO
+    constexpr auto steps = 10;
+    const auto deltatime = time / steps;
 
     FABRIK ik(links);
-    auto result = ik.Calculate(target);
-    /* TODO methods for converting to/from angles */
+    auto c = curve({endEff, endEff, target, target}); // TODO linear move first, but use cubic curve later
+
+    for(auto i = 0u; i < steps; ++i) {
+        auto t = static_cast<Real>(i) / (steps - 1);
+
+        auto target_pos = c.sample(t);
+        fmt::print("t[{}] = {}\n", i, target_pos.str());
+
+        auto result = ik.Calculate(target_pos);
+        /* TODO methods for converting to/from angles */
+
+
+        // Wait
+        std::this_thread::sleep_for(deltatime);
+    }
 }
 
 } // namespace ARC

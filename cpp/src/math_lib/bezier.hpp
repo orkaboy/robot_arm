@@ -12,7 +12,6 @@ public:
 
     curve();
     curve(vec3 p0, vec3 p1, vec3 p2, vec3 p3);
-    curve(const ControlPoints& control);
     curve(const curve& c);
     curve& operator=(const curve& c);
 

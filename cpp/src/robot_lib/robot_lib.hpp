@@ -4,6 +4,8 @@
 #include "ax-12a.hpp"
 #include "fabrik.hpp"
 
+#include <chrono>
+
 namespace ARC {
 
 class RobotArm {
@@ -21,7 +23,7 @@ public:
     auto SetSpeed(float speed) -> bool;
     auto SetSpeeds(const std::vector<float>& drivers) -> bool;
 
-    void MoveToPos(const vec3& target);
+    void MoveToPos(const vec3& target, std::chrono::milliseconds time);
 private:
     std::string mDevice;
 

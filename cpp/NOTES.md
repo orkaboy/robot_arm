@@ -26,11 +26,11 @@
 * Set up a dry-run debug mode
 * Set up math library with vec3, mat3 and quat
 * Set up simple FABRIK implementation of IK (unconstrained)
+* Implemented curve function (Bezier)
 
 ## TODO next
 
 * Implement link pos <-> angle functions for IK
-* Implement curve functions (Bezier? NURBS?)
 * Model robot arm limits (IDs 0-5)
 * Test running entire robot arm between limits (limit speed!)
 * Model full IK (implement joint constraints)

@@ -6,7 +6,6 @@ curve::curve() {}
 curve::curve(vec3 p0, vec3 p1, vec3 p2, vec3 p3)
     : p({p0, p1, p2, p3})
 {}
-curve::curve(const ControlPoints& control) : p(control) {}
 curve::curve(const curve& c) : p(c.p) {}
 curve& curve::operator=(const curve& c) {
     p = c.p;

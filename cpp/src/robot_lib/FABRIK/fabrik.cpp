@@ -30,8 +30,8 @@ void FABRIK::Forward(const Goal& target) {
     /* Set end effector pn to target */
     mLinks.back().mPos = target;
     /* Walk backwards through the chain */
-    for(auto i = mLinks.size() - 2; i >= 0; --i) {
-        auto link = mLinks[i];
+    for(int i = mLinks.size() - 2; i >= 0; --i) {
+        auto& link = mLinks[i];
         auto link2 = mLinks[i+1];
         /* Find the distance ri between the new joint position pi+1 and the joint pi */
         auto ri = (link2.mPos - link.mPos).norm();
@@ -46,9 +46,9 @@ void FABRIK::Backward(const vec3& root) {
     /* Set root to its initial position */
     mLinks.front().mPos = root;
     /* Walk forwards through the chain */
-    for(auto i = 0u; mLinks.size() - 1; ++i) {
+    for(auto i = 0u; i < mLinks.size() - 1; ++i) {
         auto link = mLinks[i];
-        auto link2 = mLinks[i+1];
+        auto &link2 = mLinks[i+1];
         /* Find the distance ri between the new joint position pi and the joint pi+1 */
         auto ri = (link.mPos - link2.mPos).norm();
         auto lambda = link.mLen / ri;

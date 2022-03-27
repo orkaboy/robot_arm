@@ -44,6 +44,10 @@ auto main(int argc, char* argv[]) -> int {
         std::this_thread::sleep_for(10ms);
         break; //TODO
     }
+
+    using namespace std::chrono_literals;
+    arm.MoveToPos(ARC::vec3(0.1, 0.1, 0.1), 1s);
+
     fmt::print("Done! Shutting down...\n");
 
     return 0;
