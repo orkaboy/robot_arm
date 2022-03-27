@@ -2,14 +2,20 @@
 #include <fmt/core.h>
 #include <cmath>
 
+#include "mat.hpp"
+
 namespace ARC {
 
 quat::quat()
     : s(0.0)
 {}
 
-quat::quat(float s_, const vec3& v_)
+quat::quat(Real s_, const vec3& v_)
     : s(s_), v(v_)
+{}
+
+quat::quat(Real s_, Real vx, Real vy, Real vz)
+    : s(s_), v(vx, vy, vz)
 {}
 
 quat::quat(const quat& q)
@@ -106,6 +112,22 @@ quat quat::inverse() const {
 
     quat conj = conjugate();
     return quat(conj.s / n, conj.v / n);
+}
+
+mat3 quat::Mat() const {
+    return mat3(
+        2*s*s + 2*v.x*v.x - 1,
+        2*v.x*v.y - 2*s*v.z,
+        2*v.x*v.z + 2*s*v.y,
+
+        2*v.x*v.y + 2*s*v.z,
+        2*s*s + 2*v.y*v.y - 1,
+        2*v.y*v.z - 2*s*v.x,
+
+        2*v.x*v.z - 2*s*v.y,
+        2*v.y*v.z - 2*s*v.x,
+        2*s*s + 2*v.z*v.z - 1
+    );
 }
 
 } // namespace ARC

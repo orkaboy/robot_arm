@@ -4,10 +4,13 @@
 
 namespace ARC {
 
+class mat3;
+
 class quat {
 public:
     quat();
-    quat(float s_, const vec3& v_);
+    quat(Real s_, Real vx, Real vy, Real vz);
+    quat(Real s_, const vec3& v_);
     quat(const quat& q);
     quat& operator=(const quat& q);
 
@@ -30,7 +33,9 @@ public:
     quat conjugate() const;
     quat inverse() const;
 
-    float s;
+    mat3 Mat() const;
+
+    Real s;
     vec3 v;
 };
 

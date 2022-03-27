@@ -117,7 +117,7 @@ Real vec3::angle(const vec3& v) const {
     auto lenProd = norm() * v.norm();
     if(lenProd > 0.0) {
         auto cosTheta = dotProd / lenProd;
-        return std::acos(cosTheta);
+        return std::acos(cosTheta); // TODO is this good? Or should atan2 be used?
     }
     return 0.0;
 }

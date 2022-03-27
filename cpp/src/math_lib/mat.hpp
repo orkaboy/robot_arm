@@ -5,6 +5,8 @@
 
 namespace ARC {
 
+class quat;
+
 // column major mat3
 class mat3 {
 public:
@@ -30,6 +32,8 @@ public:
     mat3 transpose() const;
     mat3 inverse() const;
     Real determinant() const;
+
+    quat Quat() const;
 
     std::array<Real, 9> data = {0.0};
 };

@@ -1,6 +1,9 @@
 #include "mat.hpp"
 #include <fmt/core.h>
 
+#include "quat.hpp"
+#include <cmath>
+
 namespace ARC {
 
 std::string mat3::str(bool newline) const {
@@ -152,6 +155,18 @@ vec3 mat3::operator*(const vec3& v) const {
         data[0]*v.x + data[3]*v.y + data[6]*v.z,
         data[1]*v.x + data[4]*v.y + data[7]*v.z,
         data[2]*v.x + data[5]*v.y + data[8]*v.z
+    );
+}
+
+quat mat3::Quat() const {
+    auto signX = std::signbit(data[5] - data[7]) ? -1 : 1;
+    auto signY = std::signbit(data[6] - data[2]) ? -1 : 1;
+    auto signZ = std::signbit(data[1] - data[3]) ? -1 : 1;
+    return quat(
+        std::sqrt(1 + data[0] + data[4] + data[8]) / 2,
+        std::sqrt(1 + data[0] - data[4] - data[8]) * signX / 2,
+        std::sqrt(1 - data[0] + data[4] - data[8]) * signY / 2,
+        std::sqrt(1 - data[0] - data[4] + data[8]) * signZ / 2
     );
 }
 
