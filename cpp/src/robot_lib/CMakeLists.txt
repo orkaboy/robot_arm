@@ -1,4 +1,6 @@
 
+add_subdirectory(FABRIK)
+
 add_library(robot_lib
     robot_lib.cpp
     debug.cpp
