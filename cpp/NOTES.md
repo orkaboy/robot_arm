@@ -19,18 +19,23 @@
     * Can also run free-running, set speed (can rotate freely, but the positional encoders don't work)
 
 ## C++ port
+
 * Set up CW/CCW degrees conversion
 * Set up move-to-origin test app
 * Set up config.yml file
 * Set up a dry-run debug mode
+* Set up math library with vec3, mat3 and quat
+* Set up simple FABRIK implementation of IK (unconstrained)
 
 ## TODO next
 
+* Implement link pos <-> angle functions for IK
+* Implement curve functions (Bezier? NURBS?)
 * Model robot arm limits (IDs 0-5)
 * Test running entire robot arm between limits (limit speed!)
-* Model IK (FABRIK?)
+* Model full IK (implement joint constraints)
 * What timing can be achieved?
     * Test with `chrt -r 1` and us timers
 * What applications can be made?
-    * Move point-to-point
+    * Move point-to-point (smooth move by interpolating with IK)
     * Control with gamepad
