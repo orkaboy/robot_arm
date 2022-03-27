@@ -34,9 +34,12 @@ public:
     Real dot(const vec3& v) const;
     vec3 cross(const vec3& v) const;
 
-    Real len() const;
-    vec3 norm() const;
+    Real norm() const;
+    vec3 normalize() const;
     Real angle(const vec3& v) const;
+
+    // rotate
+    vec3 rotate(Real angle, const vec3& axis) const;
 
     Real x{};
     Real y{};

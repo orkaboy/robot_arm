@@ -3,6 +3,8 @@
 
 #include <fmt/core.h>
 
+#include "quat.hpp"
+
 namespace ARC {
 
 std::string vec3::str() const {
@@ -93,12 +95,12 @@ vec3 vec3::cross(const vec3& v) const {
     );
 }
 
-Real vec3::len() const {
+Real vec3::norm() const {
     return std::sqrt(x*x + y*y + z*z);
 }
 
-vec3 vec3::norm() const {
-    auto magnitude = len();
+vec3 vec3::normalize() const {
+    auto magnitude = norm();
     if(magnitude > 0.0) {
         auto oneOverMag = 1.0f / magnitude;
         return vec3(x*oneOverMag, y*oneOverMag, z*oneOverMag);
@@ -108,12 +110,21 @@ vec3 vec3::norm() const {
 
 Real vec3::angle(const vec3& v) const {
     auto dotProd = dot(v);
-    auto lenProd = len() * v.len();
+    auto lenProd = norm() * v.norm();
     if(lenProd > 0.0) {
         auto cosTheta = dotProd / lenProd;
         return std::acos(cosTheta);
     }
     return 0.0;
+}
+
+vec3 vec3::rotate(Real angle, const vec3& axis_) const {
+    auto pure = quat(0, (*this));
+    auto axis = axis_.normalize();
+    auto q = quat(angle, axis).unitnorm();
+    auto qInv = q.inverse();
+    auto rotVec = q * pure * qInv;
+    return rotVec.v;
 }
 
 } // namespace ARC
