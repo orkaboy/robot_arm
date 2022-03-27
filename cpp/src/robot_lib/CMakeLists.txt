@@ -12,6 +12,7 @@ target_link_libraries(robot_lib
     fmt::fmt
     ryml::ryml
     ARC::math
+    ARC::IK
 )
 target_include_directories(robot_lib PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)

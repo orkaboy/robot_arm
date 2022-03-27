@@ -147,4 +147,18 @@ void RobotArm::Enable(bool enable) {
     }
 }
 
+void RobotArm::MoveToPos(const vec3& target) {
+    /* TEMP TODO */
+    const auto LIMB_LEN = 0.1; // In m
+    std::vector<FABRIK::Link> links = {
+        {vec3(0,0,0), LIMB_LEN}, // Root
+        {vec3(0,0,LIMB_LEN), LIMB_LEN},
+        {vec3(0,LIMB_LEN,LIMB_LEN), 0.0} // End effector
+    };
+
+    FABRIK ik(links);
+    auto result = ik.Calculate(target);
+    /* TODO methods for converting to/from angles */
+}
+
 } // namespace ARC

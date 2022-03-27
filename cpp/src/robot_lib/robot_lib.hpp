@@ -2,6 +2,7 @@
 
 #include <dynamixel_sdk/dynamixel_sdk.h>
 #include "ax-12a.hpp"
+#include "fabrik.hpp"
 
 namespace ARC {
 
@@ -19,6 +20,8 @@ public:
 
     auto SetSpeed(float speed) -> bool;
     auto SetSpeeds(const std::vector<float>& drivers) -> bool;
+
+    void MoveToPos(const vec3& target);
 private:
     std::string mDevice;
 
