@@ -1,4 +1,4 @@
-
+add_subdirectory(math_lib)
 add_subdirectory(robot_lib)
 
 find_package(Threads REQUIRED)
