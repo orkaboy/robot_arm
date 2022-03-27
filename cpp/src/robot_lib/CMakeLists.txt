@@ -9,6 +9,7 @@ target_link_libraries(robot_lib
     VENDOR::dxl
     fmt::fmt
     ryml::ryml
+    ARC::math
 )
 target_include_directories(robot_lib PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
