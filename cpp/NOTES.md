@@ -31,9 +31,9 @@
 ## TODO next
 
 * Implement link pos <-> angle functions for IK
-* Model robot arm limits (IDs 0-5)
-* Test running entire robot arm between limits (limit speed!)
-* Model full IK (implement joint constraints)
+* Model robot arm limits (lengths for IDs 0-5, joint limits)
+* Test running entire robot arm (limit speed!)
+* Implement full IK (with joint constraints and target orientation)
 * What timing can be achieved?
     * Test with `chrt -r 1` and us timers
 * What applications can be made?

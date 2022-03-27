@@ -95,6 +95,10 @@ vec3 vec3::cross(const vec3& v) const {
     );
 }
 
+vec3 vec3::proj(const vec3& v) const {
+    return v * (dot(v) / v.dot(v)); // a' = b * ((a . b) / (b . b))
+}
+
 Real vec3::norm() const {
     return std::sqrt(x*x + y*y + z*z);
 }

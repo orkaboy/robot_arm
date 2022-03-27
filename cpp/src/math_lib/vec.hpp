@@ -29,10 +29,10 @@ public:
     vec3& operator/=(Real s);
     vec3 operator/(Real s) const;
 
-    // dot product
-    Real operator*(const vec3& v) const;
+    Real operator*(const vec3& v) const; // dot product
     Real dot(const vec3& v) const;
     vec3 cross(const vec3& v) const;
+    vec3 proj(const vec3& v) const; // Project this vector onto v
 
     Real norm() const;
     vec3 normalize() const;
