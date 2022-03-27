@@ -33,6 +33,11 @@ public:
     quat conjugate() const;
     quat inverse() const;
 
+    /* Spherical linear interpolation, SLERP */
+    quat slerp(quat p, Real t) const;
+    /* Normalized LERP */
+    quat nlerp(quat p, Real t) const;
+
     mat3 Mat() const;
 
     Real s;

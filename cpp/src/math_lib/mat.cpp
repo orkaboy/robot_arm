@@ -159,6 +159,7 @@ vec3 mat3::operator*(const vec3& v) const {
 }
 
 quat mat3::Quat() const {
+    /* https://www.mecademic.com/en/how-to-use-quaternions-in-industrial-robotics */
     auto signX = std::signbit(data[5] - data[7]) ? -1 : 1;
     auto signY = std::signbit(data[6] - data[2]) ? -1 : 1;
     auto signZ = std::signbit(data[1] - data[3]) ? -1 : 1;

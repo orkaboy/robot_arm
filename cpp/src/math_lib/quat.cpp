@@ -114,7 +114,21 @@ quat quat::inverse() const {
     return quat(conj.s / n, conj.v / n);
 }
 
+quat quat::slerp(quat p, Real t) const {
+    /* https://www.researchgate.net/post/How_do_I_calculate_the_smallest_angle_between_two_quaternions */
+    auto prod = (*this) * p.inverse();
+    auto phi2 = std::asin(prod.v.norm());
+    /* https://www.mecademic.com/en/how-to-use-quaternions-in-industrial-robotics */
+    return (*this) * (std::sin((1-t)*phi2) / std::sin(phi2)) + p * (std::sin(t*phi2) / std::sin(phi2));
+}
+
+quat quat::nlerp(quat p, Real t) const {
+    /* https://www.mecademic.com/en/how-to-use-quaternions-in-industrial-robotics */
+    return ((*this) * (1-t) + p*t).normalize();
+}
+
 mat3 quat::Mat() const {
+    /* https://www.mecademic.com/en/how-to-use-quaternions-in-industrial-robotics */
     return mat3(
         2*s*s + 2*v.x*v.x - 1,
         2*v.x*v.y - 2*s*v.z,
