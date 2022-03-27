@@ -147,4 +147,12 @@ mat3 mat3::transpose() const {
     );
 }
 
+vec3 mat3::operator*(const vec3& v) const {
+    return vec3(
+        data[0]*v.x + data[3]*v.y + data[6]*v.z,
+        data[1]*v.x + data[4]*v.y + data[7]*v.z,
+        data[2]*v.x + data[5]*v.y + data[8]*v.z
+    );
+}
+
 } // namespace ARC
