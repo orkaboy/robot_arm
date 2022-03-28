@@ -60,6 +60,16 @@ RobotArm::RobotArm(const std::string& config_file) {
     mPortHandler = dynamixel::PortHandler::getPortHandler(mDevice.c_str());
     mPacketHandler = dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
 
+    if(!mPortHandler->openPort()) {
+        fmt::print("Failed to open port {}\n", mDevice);
+        //return;
+    }
+
+    if(!mPortHandler->setBaudRate(BAUDRATE)) {
+        fmt::print("Failed to set baudrate to {}\n", BAUDRATE);
+        //return;
+    }
+
     for(auto j : joints) {
         auto servo = new AX12A(mPortHandler, mPacketHandler, j.id);
         if(j.mode == "joint") {
@@ -68,16 +78,6 @@ RobotArm::RobotArm(const std::string& config_file) {
             servo->SetWheelMode(); // TODO set speed limits?
         }
         mJoints.push_back(servo);
-    }
-
-    if(!mPortHandler->openPort()) {
-        fmt::print("Failed to open port {}\n", mDevice);
-        return;
-    }
-
-    if(!mPortHandler->setBaudRate(BAUDRATE)) {
-        fmt::print("Failed to set baudrate to {}\n", BAUDRATE);
-        return;
     }
 
     mOK = true;
