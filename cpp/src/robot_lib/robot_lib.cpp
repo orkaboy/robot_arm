@@ -9,6 +9,8 @@
 #include <ryml_std.hpp> // optional header. BUT when used, needs to be included BEFORE ryml.hpp
 #include <ryml.hpp>
 
+#include "mat.hpp"
+#include "quat.hpp"
 #include "bezier.hpp"
 
 #include <thread>

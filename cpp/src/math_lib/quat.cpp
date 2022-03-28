@@ -128,19 +128,19 @@ quat quat::nlerp(quat p, Real t) const {
 }
 
 mat3 quat::Mat() const {
-    /* https://www.mecademic.com/en/how-to-use-quaternions-in-industrial-robotics */
+    /* https://en.wikipedia.org/wiki/Rotation_matrix#Quaternion */
     return mat3(
-        2*s*s + 2*v.x*v.x - 1,
+        1 - 2*v.y*v.y - 2*v.z*v.z,
         2*v.x*v.y - 2*s*v.z,
         2*v.x*v.z + 2*s*v.y,
 
         2*v.x*v.y + 2*s*v.z,
-        2*s*s + 2*v.y*v.y - 1,
+        1 - 2*v.x*v.x + 2*v.z*v.z,
         2*v.y*v.z - 2*s*v.x,
 
         2*v.x*v.z - 2*s*v.y,
         2*v.y*v.z - 2*s*v.x,
-        2*s*s + 2*v.z*v.z - 1
+        1 - 2*v.x*v.x + 2*v.y*v.y
     );
 }
 
