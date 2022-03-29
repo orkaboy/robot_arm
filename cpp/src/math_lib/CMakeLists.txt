@@ -1,4 +1,6 @@
 
+add_subdirectory(tests)
+
 add_library(math_lib
     vec.cpp
     mat.cpp
