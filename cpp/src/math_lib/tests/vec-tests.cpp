@@ -234,7 +234,16 @@ auto Vec3Normalize() -> Status {
 }
 
 auto Vec3Angle() -> Status {
-    return Status::Err;
+    ARC::vec3 x = ARC::vec3::X();
+    ARC::vec3 y = ARC::vec3::Y();
+    ARC::vec3 z = ARC::vec3::Z();
+    assert_float(x.angle(y), M_PI/2);
+    assert_float(x.angle(-y), M_PI/2);
+    assert_float(x.angle(z), M_PI/2);
+    assert_float(x.angle(-z), M_PI/2);
+    assert_float(y.angle(z), M_PI/2);
+    assert_float(y.angle(-z), M_PI/2);
+    return Status::Ok;
 }
 
 auto Vec3Rotate() -> Status {
