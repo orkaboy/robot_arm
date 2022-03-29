@@ -8,15 +8,21 @@
 
 auto main(int argc, char* argv[]) -> int {
     std::string config_file = "config/config.yml";
+    ARC::Real speed_limit = 0.1;
 
 	int c;
-	while ((c = getopt(argc, argv, "c:")) != -1) {
+	while ((c = getopt(argc, argv, "c:s:")) != -1) {
 		switch(c) {
 		case 'c': {
 			config_file = optarg;
 			fmt::print("Setting config file path: '{}'\n", config_file);
 			break;
 		}
+        case 's': {
+            speed_limit = std::stof(optarg);
+            fmt::print("Setting speed multiplier to {}.\n", speed_limit);
+            break;
+        }
 		default:
 			fmt::print("Unsupported commandline argument: {}\n", c);
 			return -1;
@@ -33,11 +39,11 @@ auto main(int argc, char* argv[]) -> int {
     arm.Enable(true);
     // TEMP TODO Set positions
     // Just for safety, limit speeds
-    fmt::print("Limiting speed to {}%...\n", 0.1 * 100);
-    arm.SetSpeed(0.1);
+    fmt::print("Limiting speed to {}%...\n", speed_limit * 100);
+    arm.SetSpeed(speed_limit);
 
     fmt::print("Moving to origin...\n");
-    std::vector<float> origin = {0,0,0,0,0,0};
+    std::vector<ARC::Real> origin = {0,0,0,0,0,0};
     arm.SetJoints(origin);
     while(!arm.JointsIsDoneMoving(origin)) {
         using namespace std::chrono_literals;

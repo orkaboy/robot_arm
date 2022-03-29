@@ -49,8 +49,8 @@ namespace Constants {
     constexpr uint32_t PosMin               = 0;
     constexpr uint32_t PosMax               = 1023;
 
-    constexpr float    AngleMin             = -5*M_PI/6;
-    constexpr float    AngleMax             =  5*M_PI/6;
+    constexpr Real     AngleMin             = -5*M_PI/6;
+    constexpr Real     AngleMax             =  5*M_PI/6;
 
     constexpr uint16_t MaxSpeed             = 1023;
     constexpr uint16_t CWOffset             = 1024;
@@ -114,19 +114,19 @@ void AX12A::SetWheelMode() {
     mWheelMode = true;
 }
 
-auto AX12A::AngleToPos(float angle) -> uint16_t {
+auto AX12A::AngleToPos(Real angle) -> uint16_t {
     if(angle < Constants::AngleMin) { angle = Constants::AngleMin; }
     if(angle > Constants::AngleMax) { angle = Constants::AngleMax; }
     return Constants::PosMin + (Constants::PosMax - Constants::PosMin) * (angle - Constants::AngleMin) / (Constants::AngleMax - Constants::AngleMin);
 }
 
-auto AX12A::PosToAngle(uint16_t pos) -> float {
+auto AX12A::PosToAngle(uint16_t pos) -> Real {
     if(pos < Constants::PosMin) { pos = Constants::PosMin; }
     if(pos > Constants::PosMax) { pos = Constants::PosMax; }
-    return Constants::AngleMin + (Constants::AngleMax - Constants::AngleMin) * (static_cast<float>(pos) - Constants::PosMin) / (Constants::PosMax - Constants::PosMin);
+    return Constants::AngleMin + (Constants::AngleMax - Constants::AngleMin) * (static_cast<Real>(pos) - Constants::PosMin) / (Constants::PosMax - Constants::PosMin);
 }
 
-void AX12A::SetJointMode(float min, float max) {
+void AX12A::SetJointMode(Real min, Real max) {
     /* Servo speed is set with REG::MovingSpeed 0..1023 (0 = max speed) */
     /* Set position with REG::GoalPosition */
     uint16_t cw = AngleToPos(min);
@@ -136,12 +136,12 @@ void AX12A::SetJointMode(float min, float max) {
     mWheelMode = false;
 }
 
-void AX12A::JointSet(float angle) {
+void AX12A::JointSet(Real angle) {
     auto pos = AngleToPos(angle);
     Write2ByteTxRx(REG::GoalPosition, pos);
 }
 
-void AX12A::SyncJointMove(const std::vector<std::pair<AX12A*, float>>& positions) {
+void AX12A::SyncJointMove(const std::vector<std::pair<AX12A*, Real>>& positions) {
     if(positions.empty()) {
         fmt::print("[AX12A::SyncJointMove] positions vector is empty!\n");
         return;
@@ -184,7 +184,7 @@ void AX12A::SyncJointMove(const std::vector<std::pair<AX12A*, float>>& positions
     groupSyncWrite.txPacket();
 }
 
-void AX12A::SyncWheelMove(const std::vector<std::pair<AX12A*, float>>& speeds) {
+void AX12A::SyncWheelMove(const std::vector<std::pair<AX12A*, Real>>& speeds) {
     if(speeds.empty()) {
         fmt::print("[AX12A::SyncWheelMove] speeds vector is empty!\n");
         return;
@@ -228,7 +228,7 @@ void AX12A::SyncWheelMove(const std::vector<std::pair<AX12A*, float>>& speeds) {
 }
 
 // 1.0 = full speed ccw, -1.0 = full speed cw
-auto AX12A::SpeedToRaw(float speed) -> uint16_t {
+auto AX12A::SpeedToRaw(Real speed) -> uint16_t {
     /* 0-1023 is move CCW (0 = stop, 1023 = full output) */
     /* 1024-2047 is move CW (1024 = stop, 2047 = full output) */
     uint16_t value = 0;
@@ -244,13 +244,13 @@ auto AX12A::SpeedToRaw(float speed) -> uint16_t {
 }
 
 // 1.0 = full speed ccw, -1.0 = full speed cw
-void AX12A::WheelSet(float speed) {
+void AX12A::WheelSet(Real speed) {
     auto value = SpeedToRaw(speed);
     /* In Wheel mode, servo can move freely using REG::MovingSpeed */
     Write2ByteTxRx(REG::MovingSpeed, value);
 }
 
-auto AX12A::JointGet() const -> float {
+auto AX12A::JointGet() const -> Real {
     uint8_t dxl_error{};
     uint16_t position{};
     auto dxl_comm_result = mPacketHandler->read2ByteTxRx(mPortHandler, mID, REG::PresentPosition, &position, &dxl_error);

@@ -25,13 +25,13 @@ RobotArm::RobotArm(const std::string& config_file) {
     mDevice = DEVICENAME;
 
     struct JointConfig {
-        JointConfig(uint32_t id_, std::string mode_, float lim_min_, float lim_max_)
+        JointConfig(uint32_t id_, std::string mode_, Real lim_min_, Real lim_max_)
             : id(id_), mode(mode_), lim_min(lim_min_), lim_max(lim_max_)
         {}
         uint32_t id;
         std::string mode;
-        float lim_min;
-        float lim_max;
+        Real lim_min;
+        Real lim_max;
     };
     std::vector<JointConfig> joints;
 
@@ -48,7 +48,7 @@ RobotArm::RobotArm(const std::string& config_file) {
         for(auto child : tree["links"].children()) {
             uint32_t id;
             std::string mode;
-            float lim_min, lim_max;
+            Real lim_min, lim_max;
             child["id"] >> id;
             child["mode"] >> mode;
             child["lim_min"] >> lim_min;
@@ -91,13 +91,13 @@ RobotArm::~RobotArm() {
     mPortHandler->closePort();
 }
 
-auto RobotArm::SetJoints(const std::vector<float>& drivers) -> bool {
+auto RobotArm::SetJoints(const std::vector<Real>& drivers) -> bool {
     if(drivers.size() != mJoints.size()) {
         fmt::print("[RobotArm::SetJoints] Size of joints and drivers are not the same!\n");
         return false;
     }
 
-    std::vector<std::pair<AX12A*, float>> instructions;
+    std::vector<std::pair<AX12A*, Real>> instructions;
     for(auto i = 0u; i < mJoints.size(); ++i) {
         auto j = mJoints[i];
         auto d = drivers[i];
@@ -109,18 +109,18 @@ auto RobotArm::SetJoints(const std::vector<float>& drivers) -> bool {
     return true;
 }
 
-auto RobotArm::SetSpeed(float speed) -> bool {
-    const auto drivers = std::vector<float>(mJoints.size(), speed);
+auto RobotArm::SetSpeed(Real speed) -> bool {
+    const auto drivers = std::vector<Real>(mJoints.size(), speed);
     return SetSpeeds(drivers);
 }
 
-auto RobotArm::SetSpeeds(const std::vector<float>& drivers) -> bool {
+auto RobotArm::SetSpeeds(const std::vector<Real>& drivers) -> bool {
     if(drivers.size() != mJoints.size()) {
         fmt::print("[RobotArm::SetSpeeds] Size of joints and drivers are not the same!\n");
         return false;
     }
 
-    std::vector<std::pair<AX12A*, float>> instructions;
+    std::vector<std::pair<AX12A*, Real>> instructions;
     for(auto i = 0u; i < mJoints.size(); ++i) {
         auto j = mJoints[i];
         auto d = drivers[i];
@@ -132,7 +132,7 @@ auto RobotArm::SetSpeeds(const std::vector<float>& drivers) -> bool {
     return true;
 }
 
-auto RobotArm::JointsIsDoneMoving(const std::vector<float>& drivers) const -> bool {
+auto RobotArm::JointsIsDoneMoving(const std::vector<Real>& drivers) const -> bool {
     if(drivers.size() != mJoints.size()) {
         return false;
     }

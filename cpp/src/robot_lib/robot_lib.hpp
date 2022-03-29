@@ -17,11 +17,11 @@ public:
 
     void Enable(bool enable);
 
-    auto SetJoints(const std::vector<float>& drivers) -> bool;
-    auto JointsIsDoneMoving(const std::vector<float>& drivers) const -> bool;
+    auto SetJoints(const std::vector<Real>& drivers) -> bool;
+    auto JointsIsDoneMoving(const std::vector<Real>& drivers) const -> bool;
 
-    auto SetSpeed(float speed) -> bool;
-    auto SetSpeeds(const std::vector<float>& drivers) -> bool;
+    auto SetSpeed(Real speed) -> bool;
+    auto SetSpeeds(const std::vector<Real>& drivers) -> bool;
 
     void MoveToPos(const vec3& target, std::chrono::milliseconds time);
 private:
