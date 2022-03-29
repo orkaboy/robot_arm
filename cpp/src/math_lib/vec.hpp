@@ -6,6 +6,8 @@ namespace ARC {
 
 using Real = float;
 
+Real clamp(Real value, Real min, Real max);
+
 class vec3 {
 public:
     vec3();

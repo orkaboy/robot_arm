@@ -110,6 +110,7 @@ auto RobotArm::SetJoints(const std::vector<Real>& drivers) -> bool {
 }
 
 auto RobotArm::SetSpeed(Real speed) -> bool {
+    speed = clamp(speed, 0.0, 1.0);
     const auto drivers = std::vector<Real>(mJoints.size(), speed);
     return SetSpeeds(drivers);
 }

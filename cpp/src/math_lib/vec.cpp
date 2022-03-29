@@ -7,6 +7,10 @@
 
 namespace ARC {
 
+Real clamp(Real value, Real min, Real max) {
+    return std::min(std::max(value, min), max);
+}
+
 std::string vec3::str() const {
     return fmt::format("({} {} {})", x, y, z);
 }
