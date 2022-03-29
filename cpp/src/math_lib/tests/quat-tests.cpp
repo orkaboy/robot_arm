@@ -1,10 +1,5 @@
 #include "quat.hpp"
-#include <string>
-
-enum class Status {
-    Ok = 0,
-    Err = 1,
-};
+#include "testbench.hpp"
 
 enum class Tests {
     QuatConstruct = 0,

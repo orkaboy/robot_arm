@@ -4,7 +4,7 @@
 
 namespace ARC {
 
-using Real = float;
+using Real = double;
 
 Real clamp(Real value, Real min, Real max);
 
