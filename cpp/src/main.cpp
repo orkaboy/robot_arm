@@ -1,4 +1,5 @@
 #include "robot_lib.hpp"
+#include "debug.hpp"
 
 #include <fmt/core.h>
 #include <unistd.h>
@@ -32,7 +33,9 @@ auto main(int argc, char* argv[]) -> int {
     ARC::RobotArm arm(config_file);
     if(!arm.IsOK()) {
         fmt::print("Unable to initialize robot arm.\n");
-        //return -1;
+        if(!ARC::DEBUG()) {
+            return -1;
+        }
     }
 
 
@@ -45,14 +48,21 @@ auto main(int argc, char* argv[]) -> int {
     fmt::print("Moving to origin...\n");
     std::vector<ARC::Real> origin = {0,0,0,0,0,0};
     arm.SetJoints(origin);
-    while(!arm.JointsIsDoneMoving(origin)) {
-        using namespace std::chrono_literals;
-        std::this_thread::sleep_for(10ms);
-        break; //TODO
+    
+    using namespace std::chrono_literals;
+
+    if(!ARC::DEBUG()) {
+        while(!arm.JointsIsDoneMoving(origin)) {
+            std::this_thread::sleep_for(10ms);
+        }
     }
+
+    std::this_thread::sleep_for(2s);
 
     using namespace std::chrono_literals;
     arm.MoveToPos(ARC::vec3(0.1, 0.1, 0.1), 1s);
+    
+    std::this_thread::sleep_for(2s);
 
     fmt::print("Done! Shutting down...\n");
 
