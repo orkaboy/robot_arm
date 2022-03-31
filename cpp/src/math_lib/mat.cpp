@@ -100,6 +100,21 @@ mat3& mat3::operator*=(Real s) {
     return *this;
 }
 
+mat3 mat3::operator/(Real s) const {
+    mat3 ret;
+    for(auto i = 0u; i < data.size(); ++i) {
+        ret.data[i] = data[i] / s;
+    }
+    return ret;
+}
+
+mat3& mat3::operator/=(Real s) {
+    for(auto i = 0u; i < data.size(); ++i) {
+        data[i] /= s;
+    }
+    return *this;
+}
+
 mat3 mat3::operator*(const mat3& m) const {
     return mat3(
         data[0]*m.data[0] + data[3]*m.data[1] + data[6]*m.data[2],

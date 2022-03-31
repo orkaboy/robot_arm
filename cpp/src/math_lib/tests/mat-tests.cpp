@@ -7,11 +7,13 @@ enum class Tests {
     Mat3Str = 1,
     Mat3Add = 2,
     Mat3Sub = 3,
-    Mat3Mul = 4,
-    Mat3Transpose = 5,
-    Mat3Inverse = 6,
-    Mat3Determinant = 7,
-    Mat3ToQuat = 8,
+    Mat3MulScalar = 4,
+    Mat3DivScalar = 5,
+    Mat3MulMat = 6,
+    Mat3Transpose = 7,
+    Mat3Inverse = 8,
+    Mat3Determinant = 9,
+    Mat3ToQuat = 10,
 };
 
 auto Mat3Construct() -> Status {
@@ -180,7 +182,65 @@ auto Mat3Sub() -> Status {
     return Status::Ok;
 }
 
-auto Mat3Mul() -> Status {
+auto Mat3MulScalar() -> Status {
+    ARC::mat3 m1(
+        1, 4, 7,
+        2, 5, 8,
+        3, 6, 9
+    );
+    ARC::mat3 m10 = m1 * 10;
+    assert_float(m10.data[0], 10);
+    assert_float(m10.data[1], 20);
+    assert_float(m10.data[2], 30);
+    assert_float(m10.data[3], 40);
+    assert_float(m10.data[4], 50);
+    assert_float(m10.data[5], 60);
+    assert_float(m10.data[6], 70);
+    assert_float(m10.data[7], 80);
+    assert_float(m10.data[8], 90);
+    m10 *= 10;
+    assert_float(m10.data[0], 100);
+    assert_float(m10.data[1], 200);
+    assert_float(m10.data[2], 300);
+    assert_float(m10.data[3], 400);
+    assert_float(m10.data[4], 500);
+    assert_float(m10.data[5], 600);
+    assert_float(m10.data[6], 700);
+    assert_float(m10.data[7], 800);
+    assert_float(m10.data[8], 900);
+    return Status::Ok;
+}
+
+auto Mat3DivScalar() -> Status {
+    ARC::mat3 m100(
+        100, 400, 700,
+        200, 500, 800,
+        300, 600, 900
+    );
+    ARC::mat3 m10 = m100 / 10;
+    assert_float(m10.data[0], 10);
+    assert_float(m10.data[1], 20);
+    assert_float(m10.data[2], 30);
+    assert_float(m10.data[3], 40);
+    assert_float(m10.data[4], 50);
+    assert_float(m10.data[5], 60);
+    assert_float(m10.data[6], 70);
+    assert_float(m10.data[7], 80);
+    assert_float(m10.data[8], 90);
+    m10 /= 10;
+    assert_float(m10.data[0], 1);
+    assert_float(m10.data[1], 2);
+    assert_float(m10.data[2], 3);
+    assert_float(m10.data[3], 4);
+    assert_float(m10.data[4], 5);
+    assert_float(m10.data[5], 6);
+    assert_float(m10.data[6], 7);
+    assert_float(m10.data[7], 8);
+    assert_float(m10.data[8], 9);
+    return Status::Ok;
+}
+
+auto Mat3MulMat() -> Status {
     return Status::Err;
 }
 
@@ -219,8 +279,12 @@ auto main(int argc, char* argv[]) -> int {
         ret = Mat3Add(); break;
     case Tests::Mat3Sub:
         ret = Mat3Sub(); break;
-    case Tests::Mat3Mul:
-        ret = Mat3Mul(); break;
+    case Tests::Mat3MulScalar:
+        ret = Mat3MulScalar(); break;
+    case Tests::Mat3DivScalar:
+        ret = Mat3DivScalar(); break;
+    case Tests::Mat3MulMat:
+        ret = Mat3MulMat(); break;
     case Tests::Mat3Transpose:
         ret = Mat3Transpose(); break;
     case Tests::Mat3Inverse:
