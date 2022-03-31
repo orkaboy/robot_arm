@@ -8,7 +8,7 @@ namespace ARC {
 
 std::string mat3::str(bool newline) const {
     if(newline) {
-        return fmt::format("[{} {} {},\n {} {} {}\n {} {} {}]",
+        return fmt::format("[{} {} {},\n {} {} {},\n {} {} {}]",
             data[0], data[3], data[6],
             data[1], data[4], data[7],
             data[2], data[5], data[8]);

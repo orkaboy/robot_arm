@@ -72,7 +72,21 @@ auto Mat3Construct() -> Status {
 }
 
 auto Mat3Str() -> Status {
-    return Status::Err;
+    ARC::mat3 m(
+        0, 3, 6,
+        1, 4, 7,
+        2, 5, 8
+    );
+    std::string str1 = m.str();
+    assert(str1 ==
+        "[0 3 6, 1 4 7, 2 5 8]"
+    );
+    std::string str2 = m.str(true);
+    assert(str2 ==
+        "[0 3 6,\n 1 4 7,\n 2 5 8]"
+    );
+
+    return Status::Ok;
 }
 
 auto Mat3Add() -> Status {
