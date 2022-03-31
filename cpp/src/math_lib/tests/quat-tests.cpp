@@ -57,11 +57,40 @@ auto QuatStr() -> Status {
 }
 
 auto QuatAdd() -> Status {
-    return Status::Err;
+    ARC::quat q1(1, 2, 3, 4);
+    ARC::quat q2(5, 6, 7, 8);
+    ARC::quat q3 = q1 + q2;
+    assert_float(q3.s, 6);
+    assert_float(q3.v.x, 8);
+    assert_float(q3.v.y, 10);
+    assert_float(q3.v.z, 12);
+    q3 = q2 + q1;
+    assert_float(q3.s, 6);
+    assert_float(q3.v.x, 8);
+    assert_float(q3.v.y, 10);
+    assert_float(q3.v.z, 12);
+    q3 += q1;
+    assert_float(q3.s, 7);
+    assert_float(q3.v.x, 10);
+    assert_float(q3.v.y, 13);
+    assert_float(q3.v.z, 16);
+    return Status::Ok;
 }
 
 auto QuatSub() -> Status {
-    return Status::Err;
+    ARC::quat q1(5, 6, 7, 8);
+    ARC::quat q2(4, 3, 2, 1);
+    ARC::quat q3 = q1 - q2;
+    assert_float(q3.s, 1);
+    assert_float(q3.v.x, 3);
+    assert_float(q3.v.y, 5);
+    assert_float(q3.v.z, 7);
+    q3 -= q2;
+    assert_float(q3.s, -3);
+    assert_float(q3.v.x, 0);
+    assert_float(q3.v.y, 3);
+    assert_float(q3.v.z, 6);
+    return Status::Ok;
 }
 
 auto QuatMul() -> Status {
