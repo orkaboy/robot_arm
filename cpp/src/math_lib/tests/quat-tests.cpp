@@ -15,7 +15,8 @@ enum class Tests {
     QuatInverse = 9,
     QuatSlerp = 10,
     QuatNlerp = 11,
-    QuatToMat = 12,
+    QuatToMatIdentity = 12,
+    QuatToMat2 = 13,
 };
 
 auto QuatConstruct() -> Status {
@@ -48,7 +49,11 @@ auto QuatConstruct() -> Status {
 }
 
 auto QuatStr() -> Status {
-    return Status::Err;
+    ARC::quat q1;
+    assert(q1.str() == "[0, (0 0 0)]");
+    ARC::quat q2(1, 2, 3, 4);
+    assert(q2.str() == "[1, (2 3 4)]");
+    return Status::Ok;
 }
 
 auto QuatAdd() -> Status {
@@ -91,7 +96,28 @@ auto QuatNlerp() -> Status {
     return Status::Err;
 }
 
-auto QuatToMat() -> Status {
+auto QuatToMatIdentity() -> Status {
+    ARC::mat3 m_ref;
+
+    const ARC::quat q;
+    ARC::mat3 m = q.Mat();
+    // Compare identity matrix with identity quaternion
+    for(auto i = 0u; i < m.data.size(); ++i) {
+        assert_float(m.data[i], m_ref.data[i]);
+    }
+    return Status::Ok;
+}
+
+auto QuatToMat2() -> Status {
+    // TODO more complex rotation comparisons
+    ARC::mat3 m_ref;
+
+    const ARC::quat q;
+    ARC::mat3 m = q.Mat();
+    // Compare identity matrix with identity quaternion
+    for(auto i = 0u; i < m.data.size(); ++i) {
+        assert_float(m.data[i], m_ref.data[i]);
+    }
     return Status::Err;
 }
 
@@ -130,8 +156,10 @@ auto main(int argc, char* argv[]) -> int {
         ret = QuatSlerp(); break;
     case Tests::QuatNlerp:
         ret = QuatNlerp(); break;
-    case Tests::QuatToMat:
-        ret = QuatToMat(); break;
+    case Tests::QuatToMatIdentity:
+        ret = QuatToMatIdentity(); break;
+    case Tests::QuatToMat2:
+        ret = QuatToMat2(); break;
     default:
         break;
     }
