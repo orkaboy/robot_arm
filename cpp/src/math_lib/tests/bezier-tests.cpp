@@ -3,7 +3,8 @@
 
 enum class Tests {
     BezierConstruct = 0,
-    BezierSample = 1,
+    BezierSampleLine = 1,
+    BezierSampleCurve = 2,
 };
 
 auto BezierConstruct() -> Status {
@@ -63,7 +64,7 @@ auto BezierConstruct() -> Status {
     return Status::Ok;
 }
 
-auto BezierSample() -> Status {
+auto BezierSampleLine() -> Status {
     ARC::curve b1(
         {0,0,0},
         {1,1,1},
@@ -86,10 +87,13 @@ auto BezierSample() -> Status {
     assert_float(v4.x, 3);
     assert_float(v4.y, 3);
     assert_float(v4.z, 3);
+    return Status::Ok;
+}
+
+auto BezierSampleCurve() -> Status {
     // TODO more complex curves
     return Status::Err;
 }
-
 
 auto main(int argc, char* argv[]) -> int {
     if(argc != 2) {
@@ -103,8 +107,10 @@ auto main(int argc, char* argv[]) -> int {
     {
     case Tests::BezierConstruct:
         ret = BezierConstruct(); break;
-    case Tests::BezierSample:
-        ret = BezierSample(); break;
+    case Tests::BezierSampleLine:
+        ret = BezierSampleLine(); break;
+    case Tests::BezierSampleCurve:
+        ret = BezierSampleCurve(); break;
     default:
         break;
     }

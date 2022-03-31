@@ -19,7 +19,32 @@ enum class Tests {
 };
 
 auto QuatConstruct() -> Status {
-    return Status::Err;
+    ARC::quat q1;
+    assert_float(q1.s, 0.0);
+    assert_float(q1.v.x, 0.0);
+    assert_float(q1.v.y, 0.0);
+    assert_float(q1.v.z, 0.0);
+    ARC::quat q2(1,2,3,4);
+    assert_float(q2.s, 1);
+    assert_float(q2.v.x, 2);
+    assert_float(q2.v.y, 3);
+    assert_float(q2.v.z, 4);
+    ARC::quat q3(1, {2,3,4});
+    assert_float(q3.s, 1);
+    assert_float(q3.v.x, 2);
+    assert_float(q3.v.y, 3);
+    assert_float(q3.v.z, 4);
+    ARC::quat q4(q3);
+    assert_float(q4.s, 1);
+    assert_float(q4.v.x, 2);
+    assert_float(q4.v.y, 3);
+    assert_float(q4.v.z, 4);
+    ARC::quat q5 = q3;
+    assert_float(q5.s, 1);
+    assert_float(q5.v.x, 2);
+    assert_float(q5.v.y, 3);
+    assert_float(q5.v.z, 4);
+    return Status::Ok;
 }
 
 auto QuatStr() -> Status {

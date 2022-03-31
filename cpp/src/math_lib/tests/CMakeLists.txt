@@ -51,4 +51,5 @@ add_test(QuatNlerp quat-tests 11)
 add_test(QuatToMat quat-tests 12)
 
 add_test(BezierConstruct bezier-tests 0)
-add_test(BezierSample bezier-tests 1)
+add_test(BezierSampleLine bezier-tests 1)
+add_test(BezierSampleCurve bezier-tests 2)
