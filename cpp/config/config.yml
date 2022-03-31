@@ -3,8 +3,8 @@ device: "/dev/ttyUSB0"
 links:
   - id: 0
     mode: "joint"
-    lim_min: -1.8502537
-    lim_max: 1.220706
+    lim_min: -2.61799
+    lim_max: 2.61799
   - id: 1
     mode: "joint"
     lim_min: -1.59434
