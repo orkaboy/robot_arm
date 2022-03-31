@@ -245,7 +245,22 @@ auto Mat3MulMat() -> Status {
 }
 
 auto Mat3Transpose() -> Status {
-    return Status::Err;
+    ARC::mat3 m1(
+        1, 4, 7,
+        2, 5, 8,
+        3, 6, 9
+    );
+    ARC::mat3 t1 = m1.transpose();
+    assert_float(t1.data[0], 1);
+    assert_float(t1.data[1], 4);
+    assert_float(t1.data[2], 7);
+    assert_float(t1.data[3], 2);
+    assert_float(t1.data[4], 5);
+    assert_float(t1.data[5], 8);
+    assert_float(t1.data[6], 3);
+    assert_float(t1.data[7], 6);
+    assert_float(t1.data[8], 9);
+    return Status::Ok;
 }
 
 auto Mat3Inverse() -> Status {
