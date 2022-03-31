@@ -70,6 +70,21 @@ mat3& mat3::operator+=(const mat3& m) {
     return *this;
 }
 
+mat3 mat3::operator-(const mat3& m) const {
+    mat3 ret;
+    for(auto i = 0u; i < data.size(); ++i) {
+        ret.data[i] = data[i] - m.data[i];
+    }
+    return ret;
+}
+
+mat3& mat3::operator-=(const mat3& m) {
+    for(auto i = 0u; i < data.size(); ++i) {
+        data[i] -= m.data[i];
+    }
+    return *this;
+}
+
 mat3 mat3::operator*(Real s) const {
     mat3 ret;
     for(auto i = 0u; i < data.size(); ++i) {

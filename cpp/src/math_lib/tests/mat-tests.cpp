@@ -6,11 +6,12 @@ enum class Tests {
     Mat3Construct = 0,
     Mat3Str = 1,
     Mat3Add = 2,
-    Mat3Mul = 3,
-    Mat3Transpose = 4,
-    Mat3Inverse = 5,
-    Mat3Determinant = 6,
-    Mat3ToQuat = 7,
+    Mat3Sub = 3,
+    Mat3Mul = 4,
+    Mat3Transpose = 5,
+    Mat3Inverse = 6,
+    Mat3Determinant = 7,
+    Mat3ToQuat = 8,
 };
 
 auto Mat3Construct() -> Status {
@@ -90,7 +91,93 @@ auto Mat3Str() -> Status {
 }
 
 auto Mat3Add() -> Status {
-    return Status::Err;
+    ARC::mat3 m1(
+        1, 4, 7,
+        2, 5, 8,
+        3, 6, 9
+    );
+    ARC::mat3 m10(
+        10, 40, 70,
+        20, 50, 80,
+        30, 60, 90
+    );
+    ARC::mat3 m100(
+        100, 400, 700,
+        200, 500, 800,
+        300, 600, 900
+    );
+
+    ARC::mat3 m3 = m1 + m10;
+    assert_float(m3.data[0], 11);
+    assert_float(m3.data[1], 22);
+    assert_float(m3.data[2], 33);
+    assert_float(m3.data[3], 44);
+    assert_float(m3.data[4], 55);
+    assert_float(m3.data[5], 66);
+    assert_float(m3.data[6], 77);
+    assert_float(m3.data[7], 88);
+    assert_float(m3.data[8], 99);
+    m3 = m10 + m1;
+    assert_float(m3.data[0], 11);
+    assert_float(m3.data[1], 22);
+    assert_float(m3.data[2], 33);
+    assert_float(m3.data[3], 44);
+    assert_float(m3.data[4], 55);
+    assert_float(m3.data[5], 66);
+    assert_float(m3.data[6], 77);
+    assert_float(m3.data[7], 88);
+    assert_float(m3.data[8], 99);
+    m3 += m100;
+    assert_float(m3.data[0], 111);
+    assert_float(m3.data[1], 222);
+    assert_float(m3.data[2], 333);
+    assert_float(m3.data[3], 444);
+    assert_float(m3.data[4], 555);
+    assert_float(m3.data[5], 666);
+    assert_float(m3.data[6], 777);
+    assert_float(m3.data[7], 888);
+    assert_float(m3.data[8], 999);
+    return Status::Ok;
+}
+
+auto Mat3Sub() -> Status {
+    ARC::mat3 m111(
+        111, 444, 777,
+        222, 555, 888,
+        333, 666, 999
+    );
+    ARC::mat3 m1(
+        1, 4, 7,
+        2, 5, 8,
+        3, 6, 9
+    );
+    ARC::mat3 m10(
+        10, 40, 70,
+        20, 50, 80,
+        30, 60, 90
+    );
+
+    ARC::mat3 m3 = m111 - m10;
+    assert_float(m3.data[0], 101);
+    assert_float(m3.data[1], 202);
+    assert_float(m3.data[2], 303);
+    assert_float(m3.data[3], 404);
+    assert_float(m3.data[4], 505);
+    assert_float(m3.data[5], 606);
+    assert_float(m3.data[6], 707);
+    assert_float(m3.data[7], 808);
+    assert_float(m3.data[8], 909);
+    m3 -= m1;
+    assert_float(m3.data[0], 100);
+    assert_float(m3.data[1], 200);
+    assert_float(m3.data[2], 300);
+    assert_float(m3.data[3], 400);
+    assert_float(m3.data[4], 500);
+    assert_float(m3.data[5], 600);
+    assert_float(m3.data[6], 700);
+    assert_float(m3.data[7], 800);
+    assert_float(m3.data[8], 900);
+    return Status::Ok;
 }
 
 auto Mat3Mul() -> Status {
@@ -130,6 +217,8 @@ auto main(int argc, char* argv[]) -> int {
         ret = Mat3Str(); break;
     case Tests::Mat3Add:
         ret = Mat3Add(); break;
+    case Tests::Mat3Sub:
+        ret = Mat3Sub(); break;
     case Tests::Mat3Mul:
         ret = Mat3Mul(); break;
     case Tests::Mat3Transpose:
