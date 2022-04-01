@@ -98,15 +98,48 @@ auto QuatMul() -> Status {
 }
 
 auto QuatScalarMul() -> Status {
-    return Status::Err;
+    ARC::quat q1(1, 2, 3, 4);
+    ARC::quat q2 = q1 * 3;
+    assert_float(q2.s, 3);
+    assert_float(q2.v.x, 6);
+    assert_float(q2.v.y, 9);
+    assert_float(q2.v.z, 12);
+    q2 *= 2;
+    assert_float(q2.s, 6);
+    assert_float(q2.v.x, 12);
+    assert_float(q2.v.y, 18);
+    assert_float(q2.v.z, 24);
+    return Status::Ok;
 }
 
 auto QuatNorm() -> Status {
-    return Status::Err;
+    ARC::quat q1(2, 3, 4, 5);
+    // sqrt(4 + 9 + 16 + 25) = sqrt(54)
+    ARC::Real norm = q1.norm();
+    assert_float(norm, std::sqrt(54));
+    // 4 + 9 + 16 + 25 = 54
+    ARC::Real norm2 = q1.norm2();
+    assert_float(norm2, 54);
+    return Status::Ok;
 }
 
 auto QuatNormalize() -> Status {
-    return Status::Err;
+    ARC::quat q0;
+    ARC::quat q0_normalized = q0.normalize();
+    assert_float(q0_normalized.s, 0);
+    assert_float(q0_normalized.v.x, 0);
+    assert_float(q0_normalized.v.y, 0);
+    assert_float(q0_normalized.v.z, 0);
+
+    ARC::quat q1(2, 3, 4, 5);
+    ARC::Real norm = q1.norm();
+    ARC::quat q1_normalized = q1.normalize();
+    assert_float(q1_normalized.s, 2 / norm);
+    assert_float(q1_normalized.v.x, 3 / norm);
+    assert_float(q1_normalized.v.y, 4 / norm);
+    assert_float(q1_normalized.v.z, 5 / norm);
+
+    return Status::Ok;
 }
 
 auto QuatUnitnorm() -> Status {
