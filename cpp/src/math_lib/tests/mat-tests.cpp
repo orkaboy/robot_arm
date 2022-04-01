@@ -15,6 +15,7 @@ enum class Tests {
     Mat3Determinant = 9,
     Mat3ToQuatIdentity = 10,
     Mat3ToQuat2 = 11,
+    Mat3MulVec3 = 12,
 };
 
 auto Mat3Construct() -> Status {
@@ -242,7 +243,48 @@ auto Mat3DivScalar() -> Status {
 }
 
 auto Mat3MulMat() -> Status {
-    return Status::Err;
+    ARC::mat3 m1(
+        1, 4, 7,
+        2, 5, 8,
+        3, 6, 9
+    );
+    ARC::mat3 m2(
+        3, 2, 1,
+        4, 3, 2,
+        5, 4, 3
+    );
+
+    ARC::mat3 m3 = m1 * m2;
+    assert_float(m3.data[0], 54); // 1*3 + 4*4 + 7*5 = 54
+    assert_float(m3.data[1], 66); // 2*3 + 5*4 + 8*5 = 66
+    assert_float(m3.data[2], 78); // 3*3 + 6*4 + 9*5 = 78
+    assert_float(m3.data[3], 42); // 1*2 + 4*3 + 7*4 = 42
+    assert_float(m3.data[4], 51); // 2*2 + 5*3 + 8*4 = 51
+    assert_float(m3.data[5], 60); // 3*2 + 6*3 + 9*4 = 60
+    assert_float(m3.data[6], 30); // 1*1 + 4*2 + 7*3 = 30
+    assert_float(m3.data[7], 36); // 2*1 + 5*2 + 8*3 = 36
+    assert_float(m3.data[8], 42); // 3*1 + 6*2 + 9*3 = 42
+    return Status::Ok;
+}
+
+auto Mat3MulVec3() -> Status {
+    ARC::mat3 identity;
+    ARC::mat3 rot1(
+        0, 1, 0,
+        0, 0, 1,
+        1, 0, 0
+    );
+    ARC::vec3 v1(1, 2, 3);
+    ARC::vec3 v2 = identity * v1;
+    assert_float(v2.x, 1);
+    assert_float(v2.y, 2);
+    assert_float(v2.z, 3);
+    // Note: column major
+    ARC::vec3 v3 = rot1 * v1;
+    assert_float(v3.x, 2);
+    assert_float(v3.y, 3);
+    assert_float(v3.z, 1);
+    return Status::Ok;
 }
 
 auto Mat3Transpose() -> Status {
@@ -271,11 +313,10 @@ auto Mat3Inverse() -> Status {
 auto Mat3Determinant() -> Status {
     return Status::Err;
 }
-#include <fmt/core.h>
+
 auto Mat3ToQuatIdentity() -> Status {
     ARC::mat3 identity;
     ARC::quat q_identity = identity.Quat();
-    fmt::print("{}\n", q_identity.str());
     assert_float(q_identity.s, 1);
     assert_float(q_identity.v.x, 0);
     assert_float(q_identity.v.y, 0);
@@ -322,6 +363,8 @@ auto main(int argc, char* argv[]) -> int {
         ret = Mat3ToQuatIdentity(); break;
     case Tests::Mat3ToQuat2:
         ret = Mat3ToQuat2(); break;
+    case Tests::Mat3MulVec3:
+        ret = Mat3MulVec3(); break;
     default:
         break;
     }

@@ -39,6 +39,7 @@ add_test(Mat3Inverse mat-tests 8)
 add_test(Mat3Determinant mat-tests 9)
 add_test(Mat3ToQuatIdentity mat-tests 10)
 add_test(Mat3ToQuat2 mat-tests 11)
+add_test(Mat3MulVec3 mat-tests 12)
 
 add_test(QuatConstruct quat-tests 0)
 add_test(QuatStr quat-tests 1)
