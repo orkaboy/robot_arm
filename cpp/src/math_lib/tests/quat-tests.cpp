@@ -163,9 +163,12 @@ auto QuatToMatIdentity() -> Status {
 
     const ARC::quat q;
     ARC::mat3 m = q.Mat();
+    const ARC::quat q2(1, 0, 0, 0);
+    ARC::mat3 m2 = q2.Mat();
     // Compare identity matrix with identity quaternion
     for(auto i = 0u; i < m.data.size(); ++i) {
         assert_float(m.data[i], m_ref.data[i]);
+        assert_float(m2.data[i], m_ref.data[i]);
     }
     return Status::Ok;
 }

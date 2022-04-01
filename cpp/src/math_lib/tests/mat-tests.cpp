@@ -13,7 +13,8 @@ enum class Tests {
     Mat3Transpose = 7,
     Mat3Inverse = 8,
     Mat3Determinant = 9,
-    Mat3ToQuat = 10,
+    Mat3ToQuatIdentity = 10,
+    Mat3ToQuat2 = 11,
 };
 
 auto Mat3Construct() -> Status {
@@ -270,8 +271,19 @@ auto Mat3Inverse() -> Status {
 auto Mat3Determinant() -> Status {
     return Status::Err;
 }
+#include <fmt/core.h>
+auto Mat3ToQuatIdentity() -> Status {
+    ARC::mat3 identity;
+    ARC::quat q_identity = identity.Quat();
+    fmt::print("{}\n", q_identity.str());
+    assert_float(q_identity.s, 1);
+    assert_float(q_identity.v.x, 0);
+    assert_float(q_identity.v.y, 0);
+    assert_float(q_identity.v.z, 0);
+    return Status::Ok;
+}
 
-auto Mat3ToQuat() -> Status {
+auto Mat3ToQuat2() -> Status {
     return Status::Err;
 }
 
@@ -306,8 +318,10 @@ auto main(int argc, char* argv[]) -> int {
         ret = Mat3Inverse(); break;
     case Tests::Mat3Determinant:
         ret = Mat3Determinant(); break;
-    case Tests::Mat3ToQuat:
-        ret = Mat3ToQuat(); break;
+    case Tests::Mat3ToQuatIdentity:
+        ret = Mat3ToQuatIdentity(); break;
+    case Tests::Mat3ToQuat2:
+        ret = Mat3ToQuat2(); break;
     default:
         break;
     }
