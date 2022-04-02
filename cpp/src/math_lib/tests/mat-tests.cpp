@@ -19,7 +19,7 @@ enum class Tests {
 };
 
 auto Mat3Construct() -> Status {
-    ARC::mat3 m;
+    const ARC::mat3 m;
     assert_float(m.data[0], 1);
     assert_float(m.data[1], 0);
     assert_float(m.data[2], 0);
@@ -29,7 +29,7 @@ auto Mat3Construct() -> Status {
     assert_float(m.data[6], 0);
     assert_float(m.data[7], 0);
     assert_float(m.data[8], 1);
-    ARC::mat3 identity = ARC::mat3::Identity();
+    const ARC::mat3 identity = ARC::mat3::Identity();
     assert_float(identity.data[0], 1);
     assert_float(identity.data[1], 0);
     assert_float(identity.data[2], 0);
@@ -39,7 +39,7 @@ auto Mat3Construct() -> Status {
     assert_float(identity.data[6], 0);
     assert_float(identity.data[7], 0);
     assert_float(identity.data[8], 1);
-    ARC::mat3 m2(
+    const ARC::mat3 m2(
         0, 3, 6,
         1, 4, 7,
         2, 5, 8
@@ -53,7 +53,7 @@ auto Mat3Construct() -> Status {
     assert_float(m2.data[6], 6);
     assert_float(m2.data[7], 7);
     assert_float(m2.data[8], 8);
-    ARC::mat3 m3(m2);
+    const ARC::mat3 m3(m2);
     assert_float(m3.data[0], 0);
     assert_float(m3.data[1], 1);
     assert_float(m3.data[2], 2);
@@ -63,7 +63,7 @@ auto Mat3Construct() -> Status {
     assert_float(m3.data[6], 6);
     assert_float(m3.data[7], 7);
     assert_float(m3.data[8], 8);
-    ARC::mat3 m4 = m2;
+    const ARC::mat3 m4 = m2;
     assert_float(m4.data[0], 0);
     assert_float(m4.data[1], 1);
     assert_float(m4.data[2], 2);
@@ -77,16 +77,16 @@ auto Mat3Construct() -> Status {
 }
 
 auto Mat3Str() -> Status {
-    ARC::mat3 m(
+    const ARC::mat3 m(
         0, 3, 6,
         1, 4, 7,
         2, 5, 8
     );
-    std::string str1 = m.str();
+    const std::string str1 = m.str();
     assert(str1 ==
         "[0 3 6, 1 4 7, 2 5 8]"
     );
-    std::string str2 = m.str(true);
+    const std::string str2 = m.str(true);
     assert(str2 ==
         "[0 3 6,\n 1 4 7,\n 2 5 8]"
     );
@@ -95,17 +95,17 @@ auto Mat3Str() -> Status {
 }
 
 auto Mat3Add() -> Status {
-    ARC::mat3 m1(
+    const ARC::mat3 m1(
         1, 4, 7,
         2, 5, 8,
         3, 6, 9
     );
-    ARC::mat3 m10(
+    const ARC::mat3 m10(
         10, 40, 70,
         20, 50, 80,
         30, 60, 90
     );
-    ARC::mat3 m100(
+    const ARC::mat3 m100(
         100, 400, 700,
         200, 500, 800,
         300, 600, 900
@@ -145,17 +145,17 @@ auto Mat3Add() -> Status {
 }
 
 auto Mat3Sub() -> Status {
-    ARC::mat3 m111(
+    const ARC::mat3 m111(
         111, 444, 777,
         222, 555, 888,
         333, 666, 999
     );
-    ARC::mat3 m1(
+    const ARC::mat3 m1(
         1, 4, 7,
         2, 5, 8,
         3, 6, 9
     );
-    ARC::mat3 m10(
+    const ARC::mat3 m10(
         10, 40, 70,
         20, 50, 80,
         30, 60, 90
@@ -185,7 +185,7 @@ auto Mat3Sub() -> Status {
 }
 
 auto Mat3MulScalar() -> Status {
-    ARC::mat3 m1(
+    const ARC::mat3 m1(
         1, 4, 7,
         2, 5, 8,
         3, 6, 9
@@ -214,7 +214,7 @@ auto Mat3MulScalar() -> Status {
 }
 
 auto Mat3DivScalar() -> Status {
-    ARC::mat3 m100(
+    const ARC::mat3 m100(
         100, 400, 700,
         200, 500, 800,
         300, 600, 900
@@ -243,18 +243,18 @@ auto Mat3DivScalar() -> Status {
 }
 
 auto Mat3MulMat() -> Status {
-    ARC::mat3 m1(
+    const ARC::mat3 m1(
         1, 4, 7,
         2, 5, 8,
         3, 6, 9
     );
-    ARC::mat3 m2(
+    const ARC::mat3 m2(
         3, 2, 1,
         4, 3, 2,
         5, 4, 3
     );
 
-    ARC::mat3 m3 = m1 * m2;
+    const ARC::mat3 m3 = m1 * m2;
     assert_float(m3.data[0], 54); // 1*3 + 4*4 + 7*5 = 54
     assert_float(m3.data[1], 66); // 2*3 + 5*4 + 8*5 = 66
     assert_float(m3.data[2], 78); // 3*3 + 6*4 + 9*5 = 78
@@ -268,19 +268,19 @@ auto Mat3MulMat() -> Status {
 }
 
 auto Mat3MulVec3() -> Status {
-    ARC::mat3 identity;
-    ARC::mat3 rot1(
+    const ARC::mat3 identity;
+    const ARC::mat3 rot1(
         0, 1, 0,
         0, 0, 1,
         1, 0, 0
     );
-    ARC::vec3 v1(1, 2, 3);
-    ARC::vec3 v2 = identity * v1;
+    const ARC::vec3 v1(1, 2, 3);
+    const ARC::vec3 v2 = identity * v1;
     assert_float(v2.x, 1);
     assert_float(v2.y, 2);
     assert_float(v2.z, 3);
     // Note: column major
-    ARC::vec3 v3 = rot1 * v1;
+    const ARC::vec3 v3 = rot1 * v1;
     assert_float(v3.x, 2);
     assert_float(v3.y, 3);
     assert_float(v3.z, 1);
@@ -288,12 +288,12 @@ auto Mat3MulVec3() -> Status {
 }
 
 auto Mat3Transpose() -> Status {
-    ARC::mat3 m1(
+    const ARC::mat3 m1(
         1, 4, 7,
         2, 5, 8,
         3, 6, 9
     );
-    ARC::mat3 t1 = m1.transpose();
+    const ARC::mat3 t1 = m1.transpose();
     assert_float(t1.data[0], 1);
     assert_float(t1.data[1], 4);
     assert_float(t1.data[2], 7);
@@ -311,12 +311,21 @@ auto Mat3Inverse() -> Status {
 }
 
 auto Mat3Determinant() -> Status {
-    return Status::Err;
+    const ARC::mat3 m1(
+        1, 4, 7,
+        2, 5, 8,
+        3, 6, 9
+    );
+    const ARC::Real det = m1.determinant();
+    // Det = 1*5*9 + 4*8*3 + 7*2*6 - 7*5*3 - 4*2*9 - 1*8*6
+    // Det = 45 + 96 + 84 - 105 - 72 - 48 = 0
+    assert_float(det, 0);
+    return Status::Ok;
 }
 
 auto Mat3ToQuatIdentity() -> Status {
-    ARC::mat3 identity;
-    ARC::quat q_identity = identity.Quat();
+    const ARC::mat3 identity;
+    const ARC::quat q_identity = identity.Quat();
     assert_float(q_identity.s, 1);
     assert_float(q_identity.v.x, 0);
     assert_float(q_identity.v.y, 0);
