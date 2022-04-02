@@ -21,23 +21,23 @@ enum class Tests {
 
 auto Vec3Construct() -> Status {
     {
-        ARC::vec3 v;
+        const ARC::vec3 v;
         assert(v.x == 0.0);
         assert(v.y == 0.0);
         assert(v.z == 0.0);
     }
     {
-        ARC::vec3 v(1.0, 2.0, 3.0);
+        const ARC::vec3 v(1.0, 2.0, 3.0);
         assert(v.x == 1.0);
         assert(v.y == 2.0);
         assert(v.z == 3.0);
 
-        ARC::vec3 v2 = v;
+        const ARC::vec3 v2 = v;
         assert(v.x == 1.0);
         assert(v.y == 2.0);
         assert(v.z == 3.0);
 
-        ARC::vec3 v3(v);
+        const ARC::vec3 v3(v);
         assert(v.x == 1.0);
         assert(v.y == 2.0);
         assert(v.z == 3.0);
@@ -58,15 +58,15 @@ auto Clamp() -> Status {
 }
 
 auto Vec3Axis() -> Status {
-    ARC::vec3 x = ARC::vec3::X();
+    const ARC::vec3 x = ARC::vec3::X();
     assert(x.x == 1.0);
     assert(x.y == 0.0);
     assert(x.z == 0.0);
-    ARC::vec3 y = ARC::vec3::Y();
+    const ARC::vec3 y = ARC::vec3::Y();
     assert(y.x == 0.0);
     assert(y.y == 1.0);
     assert(y.z == 0.0);
-    ARC::vec3 z = ARC::vec3::Z();
+    const ARC::vec3 z = ARC::vec3::Z();
     assert(z.x == 0.0);
     assert(z.y == 0.0);
     assert(z.z == 1.0);
@@ -75,19 +75,19 @@ auto Vec3Axis() -> Status {
 }
 
 auto Vec3Str() -> Status {
-    ARC::vec3 v;
+    const ARC::vec3 v;
     std::string str = v.str();
     assert(str == "(0 0 0)");
     
-    ARC::vec3 v1(1, 2, 3);
+    const ARC::vec3 v1(1, 2, 3);
     str = v1.str();
     assert(str == "(1 2 3)");
     return Status::Ok;
 }
 
 auto Vec3Add() -> Status {
-    ARC::vec3 v1(1, 2, 3);
-    ARC::vec3 v2(4, 5, 6);
+    const ARC::vec3 v1(1, 2, 3);
+    const ARC::vec3 v2(4, 5, 6);
     // operator+
     ARC::vec3 v3 = v1 + v2;
     assert(v3.x == 5);
@@ -103,8 +103,8 @@ auto Vec3Add() -> Status {
 }
 
 auto Vec3Sub() -> Status {
-    ARC::vec3 v1(6, 9, 12);
-    ARC::vec3 v2(4, 5, 6);
+    const ARC::vec3 v1(6, 9, 12);
+    const ARC::vec3 v2(4, 5, 6);
     // operator-
     ARC::vec3 v3 = v1 - v2;
     assert(v3.x == 2);
@@ -116,7 +116,7 @@ auto Vec3Sub() -> Status {
     assert(v3.y == 2);
     assert(v3.z == 3);
     // operator-(binary)
-    ARC::vec3 v4 = -v2;
+    const ARC::vec3 v4 = -v2;
     assert(v4.x == -4);
     assert(v4.y == -5);
     assert(v4.z == -6);
@@ -125,9 +125,9 @@ auto Vec3Sub() -> Status {
 }
 
 auto Vec3Mul() -> Status {
-    ARC::vec3 v1(1, 1, 1);
+    const ARC::vec3 v1(1, 1, 1);
     // operator*(Real)
-    ARC::vec3 v2 = v1 * 5;
+    const ARC::vec3 v2 = v1 * 5;
     assert(v2.x == 5);
     assert(v2.y == 5);
     assert(v2.z == 5);
@@ -149,7 +149,7 @@ auto Vec3Mul() -> Status {
 }
 
 auto Vec3Div() -> Status {
-    ARC::vec3 v1(1, 2, 3);
+    const ARC::vec3 v1(1, 2, 3);
     // operator/(Real)
     ARC::vec3 v2 = v1 / 2;
     assert(v2.x == 0.5);
@@ -164,8 +164,8 @@ auto Vec3Div() -> Status {
 }
 
 auto Vec3Dot() -> Status {
-    ARC::vec3 v1(1, 2, 3);
-    ARC::vec3 v2(4, 5, 6);
+    const ARC::vec3 v1(1, 2, 3);
+    const ARC::vec3 v2(4, 5, 6);
     // operator*(dot prod)
     //1*4 + 2*5 + 3*6 = 32
     ARC::Real dot = v1 * v2;
@@ -178,8 +178,8 @@ auto Vec3Dot() -> Status {
 }
 
 auto Vec3Cross() -> Status {
-    ARC::vec3 x = ARC::vec3::X();
-    ARC::vec3 y = ARC::vec3::Y();
+    const ARC::vec3 x = ARC::vec3::X();
+    const ARC::vec3 y = ARC::vec3::Y();
     ARC::vec3 z = x.cross(y);
     assert(z.x == 0);
     assert(z.y == 0);
@@ -192,20 +192,20 @@ auto Vec3Cross() -> Status {
 }
 
 auto Vec3Proj() -> Status {
-    ARC::vec3 x = ARC::vec3::X();
-    ARC::vec3 y = ARC::vec3::Y();
-    ARC::vec3 z = ARC::vec3::Z();
-    ARC::vec3 v1(3, 5, 7);
+    const ARC::vec3 x = ARC::vec3::X();
+    const ARC::vec3 y = ARC::vec3::Y();
+    const ARC::vec3 z = ARC::vec3::Z();
+    const ARC::vec3 v1(3, 5, 7);
     // Project v1 onto x
-    ARC::vec3 v2 = v1.proj(x);
+    const ARC::vec3 v2 = v1.proj(x);
     assert(v2.x == 3);
     assert(v2.y == 0);
     assert(v2.z == 0);
-    ARC::vec3 v3 = v1.proj(y);
+    const ARC::vec3 v3 = v1.proj(y);
     assert(v3.x == 0);
     assert(v3.y == 5);
     assert(v3.z == 0);
-    ARC::vec3 v4 = v1.proj(z);
+    const ARC::vec3 v4 = v1.proj(z);
     assert(v4.x == 0);
     assert(v4.y == 0);
     assert(v4.z == 7);
@@ -213,20 +213,20 @@ auto Vec3Proj() -> Status {
 }
 
 auto Vec3Norm() -> Status {
-    ARC::vec3 v1(3, 4, 0);
-    ARC::Real norm = v1.norm();
+    const ARC::vec3 v1(3, 4, 0);
+    const ARC::Real norm = v1.norm();
     assert(norm == 5);
     return Status::Ok;
 }
 
 auto Vec3Normalize() -> Status {
-    ARC::vec3 v1(3, 4, 0);
-    ARC::vec3 v2 = v1.normalize();
+    const ARC::vec3 v1(3, 4, 0);
+    const ARC::vec3 v2 = v1.normalize();
     assert_float(v2.x, 0.6);
     assert_float(v2.y, 0.8);
     assert_float(v2.z, 0.0);
-    ARC::vec3 v3(2, 1, 3);
-    ARC::vec3 v4 = v3.normalize();
+    const ARC::vec3 v3(2, 1, 3);
+    const ARC::vec3 v4 = v3.normalize();
     assert_float(v4.x, 0.5345224838248488);
     assert_float(v4.y, 0.2672612419124244);
     assert_float(v4.z, 0.8017837257372732);
@@ -234,9 +234,9 @@ auto Vec3Normalize() -> Status {
 }
 
 auto Vec3Angle() -> Status {
-    ARC::vec3 x = ARC::vec3::X();
-    ARC::vec3 y = ARC::vec3::Y();
-    ARC::vec3 z = ARC::vec3::Z();
+    const ARC::vec3 x = ARC::vec3::X();
+    const ARC::vec3 y = ARC::vec3::Y();
+    const ARC::vec3 z = ARC::vec3::Z();
     assert_float(x.angle(y), M_PI/2);
     assert_float(x.angle(-y), M_PI/2);
     assert_float(x.angle(z), M_PI/2);
@@ -247,13 +247,13 @@ auto Vec3Angle() -> Status {
 }
 
 auto Vec3Rotate() -> Status {
-    ARC::vec3 x = ARC::vec3::X();
-    ARC::vec3 y = ARC::vec3::Y();
-    ARC::vec3 x_inv = x.rotate(M_PI, y); // rotate 180 degrees, will point to -X
+    const ARC::vec3 x = ARC::vec3::X();
+    const ARC::vec3 y = ARC::vec3::Y();
+    const ARC::vec3 x_inv = x.rotate(M_PI, y); // rotate 180 degrees, will point to -X
     assert_float(x_inv.x, -1);
     assert_float(x_inv.y, 0);
     assert_float(x_inv.z, 0);
-    ARC::vec3 x_rot = x.rotate(M_PI/2, y); // rotate 90 degrees, will point to -Z
+    const ARC::vec3 x_rot = x.rotate(M_PI/2, y); // rotate 90 degrees, will point to -Z
     assert_float(x_rot.x, 0);
     assert_float(x_rot.y, 0);
     assert_float(x_rot.z, -1);

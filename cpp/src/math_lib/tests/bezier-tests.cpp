@@ -8,7 +8,7 @@ enum class Tests {
 };
 
 auto BezierConstruct() -> Status {
-    ARC::curve b1;
+    const ARC::curve b1;
     assert_float(b1.p[0].x, 0);
     assert_float(b1.p[0].y, 0);
     assert_float(b1.p[0].z, 0);
@@ -21,8 +21,8 @@ auto BezierConstruct() -> Status {
     assert_float(b1.p[3].x, 0);
     assert_float(b1.p[3].y, 0);
     assert_float(b1.p[3].z, 0);
-    ARC::vec3 p1(1,2,3), p2(4,5,6), p3(7,8,9), p4(10,11,12);
-    ARC::curve b2(p1, p2, p3, p4);
+    const ARC::vec3 p1(1,2,3), p2(4,5,6), p3(7,8,9), p4(10,11,12);
+    const ARC::curve b2(p1, p2, p3, p4);
     assert_float(b2.p[0].x, 1);
     assert_float(b2.p[0].y, 2);
     assert_float(b2.p[0].z, 3);
@@ -35,7 +35,7 @@ auto BezierConstruct() -> Status {
     assert_float(b2.p[3].x, 10);
     assert_float(b2.p[3].y, 11);
     assert_float(b2.p[3].z, 12);
-    ARC::curve b3(b2);
+    const ARC::curve b3(b2);
     assert_float(b3.p[0].x, 1);
     assert_float(b3.p[0].y, 2);
     assert_float(b3.p[0].z, 3);
@@ -48,7 +48,7 @@ auto BezierConstruct() -> Status {
     assert_float(b3.p[3].x, 10);
     assert_float(b3.p[3].y, 11);
     assert_float(b3.p[3].z, 12);
-    ARC::curve b4 = b2;
+    const ARC::curve b4 = b2;
     assert_float(b4.p[0].x, 1);
     assert_float(b4.p[0].y, 2);
     assert_float(b4.p[0].z, 3);
@@ -65,16 +65,16 @@ auto BezierConstruct() -> Status {
 }
 
 auto BezierSampleLine() -> Status {
-    ARC::curve b1(
+    const ARC::curve b1(
         {0,0,0},
         {1,1,1},
         {2,2,2},
         {3,3,3}
     );
-    ARC::vec3 v1 = b1.sample(0.0);
-    ARC::vec3 v2 = b1.sample(1.0/3.0);
-    ARC::vec3 v3 = b1.sample(2.0/3.0);
-    ARC::vec3 v4 = b1.sample(1.0);
+    const ARC::vec3 v1 = b1.sample(0.0);
+    const ARC::vec3 v2 = b1.sample(1.0/3.0);
+    const ARC::vec3 v3 = b1.sample(2.0/3.0);
+    const ARC::vec3 v4 = b1.sample(1.0);
     assert_float(v1.x, 0);
     assert_float(v1.y, 0);
     assert_float(v1.z, 0);

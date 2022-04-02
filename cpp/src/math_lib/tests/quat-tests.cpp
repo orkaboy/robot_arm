@@ -20,27 +20,27 @@ enum class Tests {
 };
 
 auto QuatConstruct() -> Status {
-    ARC::quat q1;
+    const ARC::quat q1;
     assert_float(q1.s, 0.0);
     assert_float(q1.v.x, 0.0);
     assert_float(q1.v.y, 0.0);
     assert_float(q1.v.z, 0.0);
-    ARC::quat q2(1,2,3,4);
+    const ARC::quat q2(1,2,3,4);
     assert_float(q2.s, 1);
     assert_float(q2.v.x, 2);
     assert_float(q2.v.y, 3);
     assert_float(q2.v.z, 4);
-    ARC::quat q3(1, {2,3,4});
+    const ARC::quat q3(1, {2,3,4});
     assert_float(q3.s, 1);
     assert_float(q3.v.x, 2);
     assert_float(q3.v.y, 3);
     assert_float(q3.v.z, 4);
-    ARC::quat q4(q3);
+    const ARC::quat q4(q3);
     assert_float(q4.s, 1);
     assert_float(q4.v.x, 2);
     assert_float(q4.v.y, 3);
     assert_float(q4.v.z, 4);
-    ARC::quat q5 = q3;
+    const ARC::quat q5 = q3;
     assert_float(q5.s, 1);
     assert_float(q5.v.x, 2);
     assert_float(q5.v.y, 3);
@@ -49,16 +49,16 @@ auto QuatConstruct() -> Status {
 }
 
 auto QuatStr() -> Status {
-    ARC::quat q1;
+    const ARC::quat q1;
     assert(q1.str() == "[0, (0 0 0)]");
-    ARC::quat q2(1, 2, 3, 4);
+    const ARC::quat q2(1, 2, 3, 4);
     assert(q2.str() == "[1, (2 3 4)]");
     return Status::Ok;
 }
 
 auto QuatAdd() -> Status {
-    ARC::quat q1(1, 2, 3, 4);
-    ARC::quat q2(5, 6, 7, 8);
+    const ARC::quat q1(1, 2, 3, 4);
+    const ARC::quat q2(5, 6, 7, 8);
     ARC::quat q3 = q1 + q2;
     assert_float(q3.s, 6);
     assert_float(q3.v.x, 8);
@@ -78,8 +78,8 @@ auto QuatAdd() -> Status {
 }
 
 auto QuatSub() -> Status {
-    ARC::quat q1(5, 6, 7, 8);
-    ARC::quat q2(4, 3, 2, 1);
+    const ARC::quat q1(5, 6, 7, 8);
+    const ARC::quat q2(4, 3, 2, 1);
     ARC::quat q3 = q1 - q2;
     assert_float(q3.s, 1);
     assert_float(q3.v.x, 3);
@@ -98,7 +98,7 @@ auto QuatMul() -> Status {
 }
 
 auto QuatScalarMul() -> Status {
-    ARC::quat q1(1, 2, 3, 4);
+    const ARC::quat q1(1, 2, 3, 4);
     ARC::quat q2 = q1 * 3;
     assert_float(q2.s, 3);
     assert_float(q2.v.x, 6);
@@ -113,27 +113,27 @@ auto QuatScalarMul() -> Status {
 }
 
 auto QuatNorm() -> Status {
-    ARC::quat q1(2, 3, 4, 5);
+    const ARC::quat q1(2, 3, 4, 5);
     // sqrt(4 + 9 + 16 + 25) = sqrt(54)
-    ARC::Real norm = q1.norm();
+    const ARC::Real norm = q1.norm();
     assert_float(norm, std::sqrt(54));
     // 4 + 9 + 16 + 25 = 54
-    ARC::Real norm2 = q1.norm2();
+    const ARC::Real norm2 = q1.norm2();
     assert_float(norm2, 54);
     return Status::Ok;
 }
 
 auto QuatNormalize() -> Status {
-    ARC::quat q0;
-    ARC::quat q0_normalized = q0.normalize();
+    const ARC::quat q0;
+    const ARC::quat q0_normalized = q0.normalize();
     assert_float(q0_normalized.s, 0);
     assert_float(q0_normalized.v.x, 0);
     assert_float(q0_normalized.v.y, 0);
     assert_float(q0_normalized.v.z, 0);
 
-    ARC::quat q1(2, 3, 4, 5);
-    ARC::Real norm = q1.norm();
-    ARC::quat q1_normalized = q1.normalize();
+    const ARC::quat q1(2, 3, 4, 5);
+    const ARC::Real norm = q1.norm();
+    const ARC::quat q1_normalized = q1.normalize();
     assert_float(q1_normalized.s, 2 / norm);
     assert_float(q1_normalized.v.x, 3 / norm);
     assert_float(q1_normalized.v.y, 4 / norm);
@@ -159,12 +159,12 @@ auto QuatNlerp() -> Status {
 }
 
 auto QuatToMatIdentity() -> Status {
-    ARC::mat3 m_ref;
+    const ARC::mat3 m_ref;
 
     const ARC::quat q;
-    ARC::mat3 m = q.Mat();
+    const ARC::mat3 m = q.Mat();
     const ARC::quat q2(1, 0, 0, 0);
-    ARC::mat3 m2 = q2.Mat();
+    const ARC::mat3 m2 = q2.Mat();
     // Compare identity matrix with identity quaternion
     for(auto i = 0u; i < m.data.size(); ++i) {
         assert_float(m.data[i], m_ref.data[i]);
@@ -175,10 +175,10 @@ auto QuatToMatIdentity() -> Status {
 
 auto QuatToMat2() -> Status {
     // TODO more complex rotation comparisons
-    ARC::mat3 m_ref;
+    const ARC::mat3 m_ref;
 
     const ARC::quat q;
-    ARC::mat3 m = q.Mat();
+    const ARC::mat3 m = q.Mat();
     // Compare identity matrix with identity quaternion
     for(auto i = 0u; i < m.data.size(); ++i) {
         assert_float(m.data[i], m_ref.data[i]);
