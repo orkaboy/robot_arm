@@ -126,6 +126,18 @@ Real vec3::angle(const vec3& v) const {
     return 0.0;
 }
 
+/*
+*this vector is the baseline, zero degrees vector
+v is the vector to calculate the angle to the baseline
+normalVector is a vector perpendicular to both the baseline and v
+The return value is the angle in radians between the vectors, between -M_PI and M_PI 
+*/
+Real vec3::angleSigned(const vec3& v, const vec3& normalVector) const {
+    auto unsignedAngle = angle(v);
+    auto sign = cross(v).dot(normalVector) >= 0.0 ? 1.0 : -1.0;
+    return unsignedAngle * sign;
+}
+
 vec3 vec3::rotate(Real angle, const vec3& axis_) const {
     auto pure = quat(0, (*this));
     auto axis = axis_.normalize();

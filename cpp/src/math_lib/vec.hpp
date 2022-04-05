@@ -39,6 +39,7 @@ public:
     Real norm() const;
     vec3 normalize() const;
     Real angle(const vec3& v) const;
+    Real angleSigned(const vec3& v, const vec3& normalVector) const;
 
     // rotate
     vec3 rotate(Real angle, const vec3& axis) const;

@@ -16,7 +16,8 @@ enum class Tests {
     Vec3Norm = 11,
     Vec3Normalize = 12,
     Vec3Angle = 13,
-    Vec3Rotate = 14,
+    Vec3AngleSigned = 14,
+    Vec3Rotate = 15,
 };
 
 auto Vec3Construct() -> Status {
@@ -246,6 +247,19 @@ auto Vec3Angle() -> Status {
     return Status::Ok;
 }
 
+auto Vec3AngleSigned() -> Status {
+    const ARC::vec3 x = ARC::vec3::X();
+    const ARC::vec3 y = ARC::vec3::Y();
+    const ARC::vec3 z = ARC::vec3::Z();
+    assert_float(x.angleSigned(y, z), M_PI/2);
+    assert_float(x.angleSigned(-y, z), -M_PI/2);
+    assert_float(x.angleSigned(z, y), -M_PI/2);
+    assert_float(x.angleSigned(-z, y), M_PI/2);
+    assert_float(y.angleSigned(z, x), M_PI/2);
+    assert_float(y.angleSigned(-z, x), -M_PI/2);
+    return Status::Ok;
+}
+
 auto Vec3Rotate() -> Status {
     const ARC::vec3 x = ARC::vec3::X();
     const ARC::vec3 y = ARC::vec3::Y();
@@ -298,6 +312,8 @@ auto main(int argc, char* argv[]) -> int {
         ret = Vec3Normalize(); break;
     case Tests::Vec3Angle:
         ret = Vec3Angle(); break;
+    case Tests::Vec3AngleSigned:
+        ret = Vec3AngleSigned(); break;
     case Tests::Vec3Rotate:
         ret = Vec3Rotate(); break;
     default:
