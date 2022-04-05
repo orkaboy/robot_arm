@@ -7,6 +7,8 @@ namespace ARC {
 using Real = double;
 
 Real clamp(Real value, Real min, Real max);
+Real deg2rad(Real angleInDegs);
+Real rad2deg(Real angleInRads);
 
 class vec3 {
 public:

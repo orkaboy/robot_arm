@@ -11,6 +11,15 @@ Real clamp(Real value, Real min, Real max) {
     return std::min(std::max(value, min), max);
 }
 
+Real deg2rad(Real angleInDegs) {
+    return (angleInDegs / 180.0) * M_PI;
+}
+
+Real rad2deg(Real angleInRads) {
+    return (angleInRads / M_PI) * 180.0;
+}
+
+
 std::string vec3::str() const {
     return fmt::format("({} {} {})", x, y, z);
 }

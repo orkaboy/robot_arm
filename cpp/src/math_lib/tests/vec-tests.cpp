@@ -18,6 +18,8 @@ enum class Tests {
     Vec3Angle = 13,
     Vec3AngleSigned = 14,
     Vec3Rotate = 15,
+    Deg2Rad = 16,
+    Rad2Deg = 17,
 };
 
 auto Vec3Construct() -> Status {
@@ -55,6 +57,26 @@ auto Clamp() -> Status {
     assert(ARC::clamp(5.0, -4.0, 4.0) == 4.0);
     assert(ARC::clamp(-3.5, -4.0, 1.0) == -3.5);
     assert(ARC::clamp(-0.3, -0.1, 1.0) == -0.1);
+    return Status::Ok;
+}
+
+auto Deg2Rad() -> Status {
+    assert_float(ARC::deg2rad(0.0), 0.0);
+    assert_float(ARC::deg2rad(30.0), M_PI/6.0);
+    assert_float(ARC::deg2rad(90.0), M_PI/2.0);
+    assert_float(ARC::deg2rad(180.0), M_PI);
+    assert_float(ARC::deg2rad(-90.0), -M_PI/2.0);
+    assert_float(ARC::deg2rad(-180.0), -M_PI);
+    return Status::Ok;
+}
+
+auto Rad2Deg() -> Status {
+    assert_float(ARC::rad2deg(0.0), 0.0);
+    assert_float(ARC::rad2deg(M_PI/2.0), 90.0);
+    assert_float(ARC::rad2deg(M_PI), 180.0);
+    assert_float(ARC::rad2deg(M_PI/6.0), 30.0);
+    assert_float(ARC::rad2deg(-M_PI/2), -90.0);
+    assert_float(ARC::rad2deg(-M_PI), -180.0);
     return Status::Ok;
 }
 
@@ -316,6 +338,11 @@ auto main(int argc, char* argv[]) -> int {
         ret = Vec3AngleSigned(); break;
     case Tests::Vec3Rotate:
         ret = Vec3Rotate(); break;
+    case Tests::Deg2Rad:
+        ret = Deg2Rad(); break;
+    case Tests::Rad2Deg:
+        ret = Rad2Deg(); break;
+
     default:
         break;
     }

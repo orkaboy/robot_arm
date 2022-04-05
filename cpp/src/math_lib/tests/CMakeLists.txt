@@ -27,6 +27,8 @@ add_test(Vec3Normalize vec-tests 12)
 add_test(Vec3Angle vec-tests 13)
 add_test(Vec3AngleSigned vec-tests 14)
 add_test(Vec3Rotate vec-tests 15)
+add_test(Deg2Rad vec-tests 16)
+add_test(Rad2Deg vec-tests 17)
 
 add_test(Mat3Construct mat-tests 0)
 add_test(Mat3Str mat-tests 1)
