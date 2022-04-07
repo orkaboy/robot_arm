@@ -20,6 +20,7 @@ enum class Tests {
     Vec3Rotate = 15,
     Deg2Rad = 16,
     Rad2Deg = 17,
+    Vec3ProjOntoPlane = 18,
 };
 
 auto Vec3Construct() -> Status {
@@ -235,6 +236,27 @@ auto Vec3Proj() -> Status {
     return Status::Ok;
 }
 
+auto Vec3ProjOntoPlane() -> Status {
+    const ARC::vec3 x = ARC::vec3::X();
+    const ARC::vec3 y = ARC::vec3::Y();
+    const ARC::vec3 z = ARC::vec3::Z();
+    const ARC::vec3 v1(3, 5, 7);
+    // Project v1 onto the planes described by normals
+    const ARC::vec3 vx = v1.projOntoPlane(x);
+    assert_float(vx.x, 0);
+    assert_float(vx.y, 0.5812381937);
+    assert_float(vx.z, 0.8137334712);
+    const ARC::vec3 vy = v1.projOntoPlane(y);
+    assert_float(vy.x, 0.3939192986);
+    assert_float(vy.y, 0);
+    assert_float(vy.z, 0.9191450300);
+    const ARC::vec3 vz = v1.projOntoPlane(z);
+    assert_float(vz.x, 0.5144957554);
+    assert_float(vz.y, 0.8574929257);
+    assert_float(vz.z, 0);
+    return Status::Ok;
+}
+
 auto Vec3Norm() -> Status {
     const ARC::vec3 v1(3, 4, 0);
     const ARC::Real norm = v1.norm();
@@ -342,6 +364,8 @@ auto main(int argc, char* argv[]) -> int {
         ret = Deg2Rad(); break;
     case Tests::Rad2Deg:
         ret = Rad2Deg(); break;
+    case Tests::Vec3ProjOntoPlane:
+        ret = Vec3ProjOntoPlane(); break;
 
     default:
         break;
