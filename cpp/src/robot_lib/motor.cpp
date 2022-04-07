@@ -4,7 +4,7 @@ namespace ARC {
 
 namespace Constants {
 
-constexpr auto JointHysteresis = 0.025; // 1.5 degrees
+constexpr auto JointHysteresis = 0.05; // 3 degrees
 
 }
 
