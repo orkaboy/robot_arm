@@ -39,7 +39,7 @@ public:
 
     quat Quat() const;
 
-    std::array<Real, 9> data = {0.0};
+    std::array<Real, 9> data = {};
 };
 
 } // namespace ARC
