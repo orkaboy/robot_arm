@@ -59,6 +59,17 @@ auto main(int argc, char* argv[]) -> int {
 
     std::this_thread::sleep_for(2s);
 
+    fmt::print("Moving to high...\n");
+    std::vector<ARC::Real> top = {0,0,1,0,0,0};
+    arm.SetJoints(top);
+    if(!ARC::DEBUG()) {
+        while(!arm.JointsIsDoneMoving(top)) {
+            std::this_thread::sleep_for(10ms);
+        }
+    }
+
+    std::this_thread::sleep_for(2s);
+
     using namespace std::chrono_literals;
     arm.MoveToPos(ARC::vec3(0.1, 0.1, 0.1), 1s);
     
