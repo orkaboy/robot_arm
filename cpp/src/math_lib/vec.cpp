@@ -112,6 +112,17 @@ vec3 vec3::proj(const vec3& v) const {
     return v * (dot(v) / v.dot(v)); // a' = b * ((a . b) / (b . b))
 }
 
+// Project this vector onto the plane described by the normal
+vec3 vec3::projOntoPlane(const vec3& normal) const {
+    if(normal.norm() <= 0.0) {
+        return *this;
+    }
+    // Projection of vector b onto plane with normal n is defined as: b - ( b.n / ( |n| squared )) * n
+    vec3 b = normalize();
+    vec3 n = normal.normalize();
+    return (b - n * b.dot(normal)).normalize(); 
+}
+
 Real vec3::norm() const {
     return std::sqrt(x*x + y*y + z*z);
 }

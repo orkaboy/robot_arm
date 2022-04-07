@@ -37,6 +37,7 @@ public:
     Real dot(const vec3& v) const;
     vec3 cross(const vec3& v) const;
     vec3 proj(const vec3& v) const; // Project this vector onto v
+    vec3 projOntoPlane(const vec3& normal) const; // Project this vector onto the plane described by the normal
 
     Real norm() const;
     vec3 normalize() const;
