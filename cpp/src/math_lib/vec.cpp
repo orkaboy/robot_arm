@@ -19,11 +19,6 @@ Real rad2deg(Real angleInRads) {
     return (angleInRads / M_PI) * 180.0;
 }
 
-
-std::string vec3::str() const {
-    return fmt::format("({} {} {})", x, y, z);
-}
-
 vec3::vec3()
     : x(0.0), y(0.0), z(0.0)
 {}

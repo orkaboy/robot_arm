@@ -174,7 +174,7 @@ void RobotArm::MoveToPos(const vec3& target, std::chrono::milliseconds time) {
         auto t = static_cast<Real>(i) / (steps - 1);
 
         auto target_pos = c.sample(t);
-        fmt::print("t[{}] = {}\n", i, target_pos.str());
+        fmt::print("t[{}] = {}\n", i, target_pos);
 
         auto result = ik.Calculate(target_pos);
         /* TODO methods for converting to/from angles */

@@ -82,12 +82,16 @@ auto Mat3Str() -> Status {
         1, 4, 7,
         2, 5, 8
     );
-    const std::string str1 = m.str();
+    const std::string str1 = fmt::format("{}", m);
     assert(str1 ==
         "[0 3 6, 1 4 7, 2 5 8]"
     );
-    const std::string str2 = m.str(true);
+    const std::string str2 = fmt::format("{:f}", m);
     assert(str2 ==
+        "[0 3 6, 1 4 7, 2 5 8]"
+    );
+    const std::string str3 = fmt::format("{:n}", m);
+    assert(str3 ==
         "[0 3 6,\n 1 4 7,\n 2 5 8]"
     );
 

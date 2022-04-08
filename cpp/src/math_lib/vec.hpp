@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <fmt/format.h>
 
 namespace ARC {
 
@@ -16,8 +17,6 @@ public:
     vec3(Real x_, Real y_, Real z_);
     vec3(const vec3& v);
     vec3& operator=(const vec3& v);
-
-    std::string str() const;
 
     static vec3 X() { return vec3(1, 0, 0); }
     static vec3 Y() { return vec3(0, 1, 0); }
@@ -53,3 +52,14 @@ public:
 };
 
 } // namespace ARC
+
+template <> struct fmt::formatter<ARC::vec3> {
+    constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
+        return ctx.end();
+    }
+
+    template <typename FormatContext>
+    auto format(const ARC::vec3& v, FormatContext& ctx) -> decltype(ctx.out()) {
+        return format_to(ctx.out(), "({} {} {})", v.x, v.y, v.z);
+    }
+};

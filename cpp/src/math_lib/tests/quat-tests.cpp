@@ -50,9 +50,11 @@ auto QuatConstruct() -> Status {
 
 auto QuatStr() -> Status {
     const ARC::quat q1;
-    assert(q1.str() == "[0, (0 0 0)]");
+    const std::string q1str = fmt::format("{}", q1);
+    assert(q1str == "[0, (0 0 0)]");
     const ARC::quat q2(1, 2, 3, 4);
-    assert(q2.str() == "[1, (2 3 4)]");
+    const std::string q2str = fmt::format("{}", q2);
+    assert(q2str == "[1, (2 3 4)]");
     return Status::Ok;
 }
 
@@ -90,11 +92,75 @@ auto QuatSub() -> Status {
     assert_float(q3.v.x, 0);
     assert_float(q3.v.y, 3);
     assert_float(q3.v.z, 6);
+    const ARC::quat _q1 = -q1;
+    assert_float(_q1.s, -5);
+    assert_float(_q1.v.x, -6);
+    assert_float(_q1.v.y, -7);
+    assert_float(_q1.v.z, -8);
+
     return Status::Ok;
 }
 
 auto QuatMul() -> Status {
-    return Status::Err;
+    // Quaternion math says that:
+    // i^2 = j^2 = k^2 = -1
+    // ij = -ji = k
+    // jk = -kj = i
+    // ki = -ik = j
+    const ARC::quat minus1(-1, 0, 0, 0);
+    const ARC::quat i(0, 1, 0, 0);
+    const ARC::quat j(0, 0, 1, 0);
+    const ARC::quat k(0, 0, 0, 1);
+    // ij = -ji = k
+    const ARC::quat ij = i * j;
+    assert_float(ij.s, k.s);
+    assert_float(ij.v.x, k.v.x);
+    assert_float(ij.v.y, k.v.y);
+    assert_float(ij.v.z, k.v.z);
+    const ARC::quat _ji = -j * i;
+    assert_float(_ji.s, k.s);
+    assert_float(_ji.v.x, k.v.x);
+    assert_float(_ji.v.y, k.v.y);
+    assert_float(_ji.v.z, k.v.z);
+    // jk = -kj = i
+    const ARC::quat jk = j * k;
+    assert_float(jk.s, i.s);
+    assert_float(jk.v.x, i.v.x);
+    assert_float(jk.v.y, i.v.y);
+    assert_float(jk.v.z, i.v.z);
+    const ARC::quat _kj = -k * j;
+    assert_float(_kj.s, i.s);
+    assert_float(_kj.v.x, i.v.x);
+    assert_float(_kj.v.y, i.v.y);
+    assert_float(_kj.v.z, i.v.z);
+    // ki = -ik = j
+    const ARC::quat ki = k * i;
+    assert_float(ki.s, j.s);
+    assert_float(ki.v.x, j.v.x);
+    assert_float(ki.v.y, j.v.y);
+    assert_float(ki.v.z, j.v.z);
+    const ARC::quat _ik = -i * k;
+    assert_float(_ik.s, j.s);
+    assert_float(_ik.v.x, j.v.x);
+    assert_float(_ik.v.y, j.v.y);
+    assert_float(_ik.v.z, j.v.z);
+    // i^2 = j^2 = k^2 = -1
+    const ARC::quat ii = i*i;
+    assert_float(ii.s, minus1.s);
+    assert_float(ii.v.x, minus1.v.x);
+    assert_float(ii.v.y, minus1.v.y);
+    assert_float(ii.v.z, minus1.v.z);
+    const ARC::quat jj = j*j;
+    assert_float(jj.s, minus1.s);
+    assert_float(jj.v.x, minus1.v.x);
+    assert_float(jj.v.y, minus1.v.y);
+    assert_float(jj.v.z, minus1.v.z);
+    const ARC::quat kk = k*k;
+    assert_float(kk.s, minus1.s);
+    assert_float(kk.v.x, minus1.v.x);
+    assert_float(kk.v.y, minus1.v.y);
+    assert_float(kk.v.z, minus1.v.z);
+    return Status::Ok;
 }
 
 auto QuatScalarMul() -> Status {

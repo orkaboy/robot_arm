@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vec.hpp"
+#include <fmt/format.h>
 
 namespace ARC {
 
@@ -14,11 +15,10 @@ public:
     quat(const quat& q);
     quat& operator=(const quat& q);
 
-    std::string str() const;
-
     quat operator+(const quat& q) const;
     quat& operator+=(const quat& q);
     quat operator-(const quat& q) const;
+    quat operator-() const;
     quat& operator-=(const quat& q);
     quat operator*(const quat& q) const;
     quat& operator*=(const quat& q);
@@ -45,3 +45,14 @@ public:
 };
 
 } // namespace ARC
+
+template <> struct fmt::formatter<ARC::quat> {
+    constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
+        return ctx.end();
+    }
+
+    template <typename FormatContext>
+    auto format(const ARC::quat& q, FormatContext& ctx) -> decltype(ctx.out()) {
+        return format_to(ctx.out(), "[{}, {}]", q.s, q.v);
+    }
+};

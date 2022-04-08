@@ -28,10 +28,6 @@ quat& quat::operator=(const quat& q) {
     return *this;
 }
 
-std::string quat::str() const {
-    return fmt::format("[{}, {}]", s, v.str());
-}
-
 quat quat::operator+(const quat& q) const {
     return quat(s+q.s, v+q.v);
 }
@@ -44,6 +40,10 @@ quat& quat::operator+=(const quat& q) {
 
 quat quat::operator-(const quat& q) const {
     return quat(s-q.s, v-q.v);
+}
+
+quat quat::operator-() const {
+    return quat(-s, -v);
 }
 
 quat& quat::operator-=(const quat& q) {
