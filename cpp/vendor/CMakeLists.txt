@@ -33,6 +33,7 @@ FetchContent_MakeAvailable(ryml)
 
 if(SIM)
     # libigl
+    option(LIBIGL_GLFW "Build target igl::glfw" ON)
     FetchContent_Declare(
         libigl
         GIT_REPOSITORY https://github.com/libigl/libigl.git
