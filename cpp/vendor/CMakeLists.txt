@@ -1,3 +1,4 @@
+include(FetchContent)
 
 # DXL SDK
 add_library(dxl_lib INTERFACE)
@@ -5,7 +6,6 @@ target_link_libraries(dxl_lib INTERFACE dxl_x64_cpp)
 add_library(VENDOR::dxl ALIAS dxl_lib)
 
 # FMT lib
-include(FetchContent)
 FetchContent_Declare(fmt
   GIT_REPOSITORY https://github.com/fmtlib/fmt.git
   GIT_TAG 8.1.1
@@ -24,10 +24,19 @@ if(RYML_BRANCH_NAME STREQUAL HEAD)
 endif()
 message(STATUS "FetchContent from branch: ${RYML_BRANCH_NAME}")
 
-include(FetchContent)
 FetchContent_Declare(ryml
     GIT_REPOSITORY https://github.com/biojppm/rapidyaml.git
     GIT_TAG ${RYML_BRANCH_NAME}
     GIT_SHALLOW FALSE  # ensure submodules are checked out
 )
 FetchContent_MakeAvailable(ryml)
+
+if(SIM)
+    # libigl
+    FetchContent_Declare(
+        libigl
+        GIT_REPOSITORY https://github.com/libigl/libigl.git
+        GIT_TAG v2.4.0
+    )
+    FetchContent_MakeAvailable(libigl)
+endif(SIM)
