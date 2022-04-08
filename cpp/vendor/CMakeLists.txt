@@ -34,6 +34,8 @@ FetchContent_MakeAvailable(ryml)
 if(SIM)
     # libigl
     option(LIBIGL_GLFW "Build target igl::glfw" ON)
+    option(LIBIGL_USE_STATIC_LIBRARY "Use libIGL as static library" ON)
+
     FetchContent_Declare(
         libigl
         GIT_REPOSITORY https://github.com/libigl/libigl.git
