@@ -2,6 +2,7 @@
 #include <fmt/core.h>
 #include <vector>
 #include <string>
+#include <map>
 
 auto main(int argc, char* argv[]) -> int {
     if(argc < 2) {
@@ -17,11 +18,18 @@ auto main(int argc, char* argv[]) -> int {
         "LP_second_connector.stl",
     };
 
+    std::map<int, Eigen::RowVector3d> colors;
+    
     igl::opengl::glfw::Viewer viewer;
     for(const auto& f : files) {
         viewer.load_mesh_from_file(fmt::format("{}/{}", filepath, f));
+        colors.emplace(viewer.data().id, 0.5*Eigen::RowVector3d::Random().array() + 0.5);
     }
-    viewer.data().set_face_based(true);
+    
+    for (auto &data : viewer.data_list) {
+        data.set_colors(colors[data.id]);
+    }
+
     viewer.launch();
 
     return 0;
