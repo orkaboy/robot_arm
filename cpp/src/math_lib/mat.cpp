@@ -6,6 +6,8 @@
 
 namespace ARC {
 
+char mat3::presentation = 'f';
+
 mat3::mat3() {
     for(auto& m : data) {
         m = 0.0;

@@ -39,6 +39,8 @@ public:
     quat Quat() const;
 
     std::array<Real, 9> data = {};
+
+    static char presentation;
 };
 
 } // namespace ARC
@@ -47,12 +49,11 @@ namespace fmt {
 namespace v8 {
 
     template <> struct formatter<ARC::mat3> {
-        char presentation = 'f';
         // Presentation format: '{:n}' - newline. '{:f}' - flat.
         constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
             // Parse the presentation format and store it in the formatter:
             auto it = ctx.begin(), end = ctx.end();
-            if (it != end && (*it == 'f' || *it == 'n')) presentation = *it++;
+            if (it != end && (*it == 'f' || *it == 'n')) ARC::mat3::presentation = *it++;
 
             // Check if reached the end of the range:
             if (it != end && *it != '}') throw format_error("invalid format");
@@ -63,7 +64,7 @@ namespace v8 {
 
         template <typename FormatContext>
         auto format(const ARC::mat3& m, FormatContext& ctx) -> decltype(ctx.out()) {
-            return presentation == 'f'
+            return ARC::mat3::presentation == 'f'
                 ? format_to(ctx.out(), "[{} {} {}, {} {} {}, {} {} {}]",
                     m.data[0], m.data[3], m.data[6],
                     m.data[1], m.data[4], m.data[7],
