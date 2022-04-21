@@ -47,7 +47,7 @@ public:
 
 } // namespace ARC
 
-template <> struct fmt::formatter<ARC::quat> {
+template <> struct fmt::v8::formatter<ARC::quat> {
     constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
         return ctx.end();
     }

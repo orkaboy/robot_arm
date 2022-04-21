@@ -43,7 +43,7 @@ public:
 
 } // namespace ARC
 
-template <> struct fmt::formatter<ARC::mat3> {
+template <> struct fmt::v8::formatter<ARC::mat3> {
     char presentation = 'f';
     // Presentation format: '{:n}' - newline. '{:f}' - flat.
     constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
