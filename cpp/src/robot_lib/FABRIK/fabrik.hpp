@@ -10,8 +10,13 @@ public:
     /* TODO add joint limits here */
     class Link {
     public:
-        Link(vec3 pos, Real len) : mPos(pos), mLen(len) {}
+        Link(vec3 pos, Real len, vec3 hingeAxis)
+            : mPos(pos)
+            , mLen(len)
+            , mHingeAxis(hingeAxis)
+        {}
 
+        vec3 mHingeAxis{};
         vec3 mPos{};
         Real mLen{};
     };

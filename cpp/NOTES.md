@@ -27,6 +27,7 @@
 * Set up math library with vec3, mat3 and quat
 * Set up simple FABRIK implementation of IK (unconstrained)
 * Implemented curve function (Bezier)
+* Tested running entire robot arm (at limited speed)
 
 ## TODO next
 
@@ -34,9 +35,9 @@
 * Implement full IK (with joint constraints and target orientation)
 * Implement link pos <-> angle functions for IK
 * Model robot arm limits (lengths for IDs 0-5, joint limits)
-* Test running entire robot arm (limit speed!)
-* What timing can be achieved?
+* What timing can be achieved? FPS?
     * Test with `chrt -r 1` and us timers
+    * Readback of position usable? Seems slow to reach target.
 * What applications can be made?
     * Move point-to-point (smooth move by interpolating with IK)
     * Control with gamepad

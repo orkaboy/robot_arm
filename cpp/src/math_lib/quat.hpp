@@ -29,6 +29,7 @@ public:
     Real norm2() const;
     quat normalize() const;
     quat unitnorm() const;
+    static quat fromAxisAngle(const vec3& axis, Real angle);
 
     quat conjugate() const;
     quat inverse() const;

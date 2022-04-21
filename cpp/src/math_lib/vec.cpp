@@ -162,4 +162,28 @@ vec3 vec3::rotate(Real angle, const vec3& axis_) const {
     return rotVec.v;
 }
 
+vec3 vec3::rotate(const quat& q) const {
+    auto pure = quat(0, (*this));
+    auto qInv = q.inverse();
+    auto rotVec = q * pure * qInv;
+    return rotVec.v;
+}
+
+// Orientation described by a -> b
+quat vec3::toRotation(const vec3& a, const vec3& b) {
+    auto dot = a.dot(b);
+    if(dot < -0.999999) {
+        auto axis = vec3::X().cross(a);
+        if(axis.norm() < 0.000001) {
+            axis = vec3::Y().cross(a);
+        }
+        return quat::fromAxisAngle(axis.normalize(), M_PI);
+    } else if(dot > 0.999999) {
+        return quat(1, 0, 0, 0);
+    } else {
+        auto axis = a.cross(b);
+        return quat::fromAxisAngle(axis, 1 + dot).normalize();
+    }
+}
+
 } // namespace ARC

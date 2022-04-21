@@ -3,6 +3,7 @@
 #include <cmath>
 
 #include "mat.hpp"
+#include "vec.hpp"
 
 namespace ARC {
 
@@ -96,6 +97,12 @@ quat quat::normalize() const {
 quat quat::unitnorm() const {
     auto s_ = std::cos(s * 0.5);
     auto v_ = v.normalize() * std::sin(s * 0.5);
+    return quat(s_, v_);
+}
+
+quat quat::fromAxisAngle(const vec3& axis, Real angle) {
+    auto s_ = std::cos(angle * 0.5);
+    auto v_ = axis * std::sin(angle * 0.5);
     return quat(s_, v_);
 }
 

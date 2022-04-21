@@ -159,9 +159,10 @@ void RobotArm::MoveToPos(const vec3& target, std::chrono::milliseconds time) {
     const auto LIMB_LEN = 0.1; // In m
     const auto endEff = vec3(0,LIMB_LEN,LIMB_LEN);
     std::vector<FABRIK::Link> links = {
-        {vec3(0,0,0), LIMB_LEN}, // Root
-        {vec3(0,0,LIMB_LEN), LIMB_LEN},
-        {endEff, 0.0} // End effector
+        {vec3(0,0,0), 0.03, vec3(0,0,1)}, // Root
+        {vec3(0,0,0.03), LIMB_LEN, vec3(1,0,0)}, // Root
+        {vec3(0,0,LIMB_LEN+0.03), LIMB_LEN, vec3(1,0,0)},
+        {endEff, 0.0, vec3(1,0,0)} // End effector
     };
     // TEMP TODO
     constexpr auto steps = 10;

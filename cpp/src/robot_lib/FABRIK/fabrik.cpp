@@ -1,6 +1,8 @@
 #include "fabrik.hpp"
 #include <fmt/core.h>
 
+#include "quat.hpp"
+
 namespace ARC {
 
 FABRIK::FABRIK(const std::vector<Link>& links, Real tolerance, uint32_t iterLimit)
@@ -33,6 +35,22 @@ void FABRIK::Forward(const Goal& target) {
     for(int i = mLinks.size() - 2; i >= 0; --i) {
         auto& link = mLinks[i];
         auto link2 = mLinks[i+1];
+        /* Calculate joint constraints */
+        auto thisBoneOuterToInnerUV = (link.mPos - link2.mPos).normalize(); // Unit vector from outer to inner
+
+        ARC::vec3 relativeHingeRotationAxis;
+        if(i > 0) {
+            auto& link3 = mLinks[i-1];
+            auto orientation = vec3::toRotation(link.mPos, link3.mPos); // Direction of previous bone
+            relativeHingeRotationAxis = link.mHingeAxis.rotate(orientation); // Rotate the hinge axis
+        } else { // Basebone
+            relativeHingeRotationAxis = link.mHingeAxis;
+        }
+
+        // TODO rotation limits?!
+
+        thisBoneOuterToInnerUV = thisBoneOuterToInnerUV.projOntoPlane(relativeHingeRotationAxis);
+
         /* Find the distance ri between the new joint position pi+1 and the joint pi */
         auto ri = (link2.mPos - link.mPos).norm();
         auto lambda = link.mLen / ri;

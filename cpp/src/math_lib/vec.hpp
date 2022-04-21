@@ -11,6 +11,8 @@ Real clamp(Real value, Real min, Real max);
 Real deg2rad(Real angleInDegs);
 Real rad2deg(Real angleInRads);
 
+class quat;
+
 class vec3 {
 public:
     vec3();
@@ -43,8 +45,11 @@ public:
     Real angle(const vec3& v) const;
     Real angleSigned(const vec3& v, const vec3& normalVector) const;
 
+    static quat toRotation(const vec3& a, const vec3& b); // Orientation between a->b
+
     // rotate
     vec3 rotate(Real angle, const vec3& axis) const;
+    vec3 rotate(const quat& q) const;
 
     Real x{};
     Real y{};
