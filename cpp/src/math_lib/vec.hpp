@@ -58,13 +58,19 @@ public:
 
 } // namespace ARC
 
-template <> struct fmt::v8::formatter<ARC::vec3> {
-    constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
-        return ctx.end();
-    }
+namespace fmt {
+namespace v8 {
 
-    template <typename FormatContext>
-    auto format(const ARC::vec3& v, FormatContext& ctx) -> decltype(ctx.out()) {
-        return format_to(ctx.out(), "({} {} {})", v.x, v.y, v.z);
-    }
-};
+    template <> struct formatter<ARC::vec3> {
+        constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin()) {
+            return ctx.end();
+        }
+
+        template <typename FormatContext>
+        auto format(const ARC::vec3& v, FormatContext& ctx) -> decltype(ctx.out()) {
+            return format_to(ctx.out(), "({} {} {})", v.x, v.y, v.z);
+        }
+    };
+
+}
+}
