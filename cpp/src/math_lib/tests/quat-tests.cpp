@@ -17,6 +17,7 @@ enum class Tests {
     QuatNlerp = 11,
     QuatToMatIdentity = 12,
     QuatToMat2 = 13,
+    QuatFromAxisAngle = 14,
 };
 
 auto QuatConstruct() -> Status {
@@ -252,6 +253,9 @@ auto QuatToMat2() -> Status {
     return Status::Err;
 }
 
+auto QuatFromAxisAngle() -> Status {
+    return Status::Err;
+}
 
 auto main(int argc, char* argv[]) -> int {
     if(argc != 2) {
@@ -291,6 +295,8 @@ auto main(int argc, char* argv[]) -> int {
         ret = QuatToMatIdentity(); break;
     case Tests::QuatToMat2:
         ret = QuatToMat2(); break;
+    case Tests::QuatFromAxisAngle:
+        ret = QuatFromAxisAngle(); break;
     default:
         break;
     }

@@ -21,6 +21,8 @@ enum class Tests {
     Deg2Rad = 16,
     Rad2Deg = 17,
     Vec3ProjOntoPlane = 18,
+    Vec3RotateQuat = 19,
+    Vec3ToRotation = 20,
 };
 
 auto Vec3Construct() -> Status {
@@ -318,6 +320,14 @@ auto Vec3Rotate() -> Status {
     return Status::Ok;
 }
 
+auto Vec3RotateQuat() -> Status {
+    return Status::Err;
+}
+
+auto Vec3ToRotation() -> Status {
+    return Status::Err;
+}
+
 auto main(int argc, char* argv[]) -> int {
     if(argc != 2) {
         return static_cast<int>(Status::Err);
@@ -366,6 +376,10 @@ auto main(int argc, char* argv[]) -> int {
         ret = Rad2Deg(); break;
     case Tests::Vec3ProjOntoPlane:
         ret = Vec3ProjOntoPlane(); break;
+    case Tests::Vec3RotateQuat:
+        ret = Vec3RotateQuat(); break;
+    case Tests::Vec3ToRotation:
+        ret = Vec3ToRotation(); break;
 
     default:
         break;

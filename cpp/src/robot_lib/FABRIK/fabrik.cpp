@@ -67,6 +67,15 @@ void FABRIK::Backward(const vec3& root) {
     for(auto i = 0u; i < mLinks.size() - 1; ++i) {
         auto link = mLinks[i];
         auto &link2 = mLinks[i+1];
+
+        /// TODO Joint constraints
+
+        if(i != 0) {
+
+        } else {
+
+        }
+
         /* Find the distance ri between the new joint position pi and the joint pi+1 */
         auto ri = (link.mPos - link2.mPos).norm();
         auto lambda = link.mLen / ri;
