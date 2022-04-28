@@ -51,11 +51,13 @@ void FABRIK::Forward(const Goal& target) {
 
         thisBoneOuterToInnerUV = thisBoneOuterToInnerUV.projOntoPlane(relativeHingeRotationAxis);
 
-        /* Find the distance ri between the new joint position pi+1 and the joint pi */
-        auto ri = (link2.mPos - link.mPos).norm();
-        auto lambda = link.mLen / ri;
-        /* Find the new joint position pi */
-        link.mPos = link2.mPos * (1 - lambda) + link.mPos * lambda;
+        link.mPos = link2.mPos + thisBoneOuterToInnerUV * link.mLen;
+
+        // /* Find the distance ri between the new joint position pi+1 and the joint pi */
+        // auto ri = (link2.mPos - link.mPos).norm();
+        // auto lambda = link.mLen / ri;
+        // /* Find the new joint position pi */
+        // link.mPos = link2.mPos * (1 - lambda) + link.mPos * lambda;
     }
 }
 
@@ -70,17 +72,55 @@ void FABRIK::Backward(const vec3& root) {
 
         /// TODO Joint constraints
 
-        if(i != 0) {
+        /* Calculate joint constraints */
+        auto thisBoneInnerToOuterUV = (link2.mPos - link.mPos).normalize(); // Unit vector from inner to outer
 
-        } else {
-
+        ARC::vec3 relativeHingeRotationAxis;
+        if(i > 0) {
+            auto& link3 = mLinks[i-1];
+            auto orientation = vec3::toRotation(link3.mPos, link.mPos); // Direction of previous bone
+            relativeHingeRotationAxis = link.mHingeAxis.rotate(orientation); // Rotate the hinge axis
+        } else { // Basebone
+            relativeHingeRotationAxis = link.mHingeAxis;
         }
 
-        /* Find the distance ri between the new joint position pi and the joint pi+1 */
-        auto ri = (link.mPos - link2.mPos).norm();
-        auto lambda = link.mLen / ri;
-        /* Find the new joint positions pi */
-        link2.mPos = link.mPos * (1 - lambda) + link2.mPos * lambda;
+        thisBoneInnerToOuterUV = thisBoneInnerToOuterUV.projOntoPlane(relativeHingeRotationAxis);
+
+        // TODO rotation limits
+
+/*
+        // Constrain rotation about reference axis if required
+        float cwConstraintDegs   = -thisBoneJoint.getHingeClockwiseConstraintDegs();
+        float acwConstraintDegs  =  thisBoneJoint.getHingeAnticlockwiseConstraintDegs();
+        if ( !( Utils.approximatelyEquals(cwConstraintDegs, -FabrikJoint3D.MAX_CONSTRAINT_ANGLE_DEGS, 0.001f) ) &&
+                !( Utils.approximatelyEquals(acwConstraintDegs, FabrikJoint3D.MAX_CONSTRAINT_ANGLE_DEGS, 0.001f) ) )
+        {
+            // Calc. the reference axis in local space
+            Vec3f relativeHingeReferenceAxis = m.times( thisBoneJoint.getHingeReferenceAxis() ).normalise();
+            
+            // Get the signed angle (about the hinge rotation axis) between the hinge reference axis and the hinge-rotation aligned bone UV
+            // Note: ACW rotation is positive, CW rotation is negative.
+            float signedAngleDegs = Vec3f.getSignedAngleBetweenDegs(relativeHingeReferenceAxis, thisBoneInnerToOuterUV, relativeHingeRotationAxis);
+            
+            // Make our bone inner-to-outer UV the hinge reference axis rotated by its maximum clockwise or anticlockwise rotation as required
+            if (signedAngleDegs > acwConstraintDegs)
+            {	
+                thisBoneInnerToOuterUV = Vec3f.rotateAboutAxisDegs(relativeHingeReferenceAxis, acwConstraintDegs, relativeHingeRotationAxis).normalise();		        		
+            }
+            else if (signedAngleDegs < cwConstraintDegs)
+            {	
+                thisBoneInnerToOuterUV = Vec3f.rotateAboutAxisDegs(relativeHingeReferenceAxis, cwConstraintDegs, relativeHingeRotationAxis).normalise();			        		
+            }
+        }
+*/
+
+        link2.mPos = link.mPos + thisBoneInnerToOuterUV * link.mLen;
+
+        // /* Find the distance ri between the new joint position pi and the joint pi+1 */
+        // auto ri = (link.mPos - link2.mPos).norm();
+        // auto lambda = link.mLen / ri;
+        // /* Find the new joint positions pi */
+        // link2.mPos = link.mPos * (1 - lambda) + link2.mPos * lambda;
     }
 }
 
@@ -119,6 +159,14 @@ std::vector<vec3> FABRIK::Calculate(const Goal& target) {
         ret.emplace_back(link.mPos);
     }
     return ret;
+}
+
+FABRIK::Goal FABRIK::ForwardKinematics() const {
+    FABRIK::Goal endEff = mLinks.back().mPos;
+    for(const auto& link: mLinks) {
+        // TODO orientation
+    }
+    return endEff;
 }
 
 } // namespace ARC

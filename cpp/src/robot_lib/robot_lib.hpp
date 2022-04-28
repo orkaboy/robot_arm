@@ -32,6 +32,7 @@ private:
 
     std::vector<AX12A*> mJoints;
 
+    FABRIK* mIk = nullptr;
     bool mOK{};
 };
 

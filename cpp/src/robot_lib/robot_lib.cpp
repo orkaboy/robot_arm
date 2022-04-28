@@ -70,6 +70,17 @@ RobotArm::RobotArm(const std::string& config_file) {
         //return;
     }
 
+    const auto LIMB_LEN = 0.1; // In m
+    const auto endEff = vec3(0,LIMB_LEN,LIMB_LEN);
+    std::vector<FABRIK::Link> links = {
+        {vec3(0,0,0), 0.03, vec3(0,0,1)}, // Root
+        {vec3(0,0,0.03), LIMB_LEN, vec3(1,0,0)}, // Root
+        {vec3(0,0,LIMB_LEN+0.03), LIMB_LEN, vec3(1,0,0)},
+        {endEff, 0.0, vec3(1,0,0)} // End effector
+    };
+    
+    mIk = new FABRIK(links);
+
     for(auto j : joints) {
         auto servo = new AX12A(mPortHandler, mPacketHandler, j.id);
         if(j.mode == "joint") {
@@ -88,6 +99,7 @@ RobotArm::~RobotArm() {
         j->Enable(false);
         delete j;
     }
+    delete mIk;
     mPortHandler->closePort();
 }
 
@@ -155,20 +167,12 @@ void RobotArm::Enable(bool enable) {
 }
 
 void RobotArm::MoveToPos(const vec3& target, std::chrono::milliseconds time) {
-    /* TEMP TODO Should be from current pos */
-    const auto LIMB_LEN = 0.1; // In m
-    const auto endEff = vec3(0,LIMB_LEN,LIMB_LEN);
-    std::vector<FABRIK::Link> links = {
-        {vec3(0,0,0), 0.03, vec3(0,0,1)}, // Root
-        {vec3(0,0,0.03), LIMB_LEN, vec3(1,0,0)}, // Root
-        {vec3(0,0,LIMB_LEN+0.03), LIMB_LEN, vec3(1,0,0)},
-        {endEff, 0.0, vec3(1,0,0)} // End effector
-    };
+    /* Move from current pos */
+    auto endEff = mIk->ForwardKinematics();
     // TEMP TODO
     constexpr auto steps = 10;
     const auto deltatime = time / steps;
 
-    FABRIK ik(links);
     auto c = curve({endEff, endEff, target, target}); // TODO linear move first, but use cubic curve later
 
     for(auto i = 0u; i < steps; ++i) {
@@ -177,7 +181,7 @@ void RobotArm::MoveToPos(const vec3& target, std::chrono::milliseconds time) {
         auto target_pos = c.sample(t);
         fmt::print("t[{}] = {}\n", i, target_pos);
 
-        auto result = ik.Calculate(target_pos);
+        auto result = mIk->Calculate(target_pos);
         /* TODO methods for converting to/from angles */
 
 
