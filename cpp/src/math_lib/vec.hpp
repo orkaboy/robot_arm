@@ -7,6 +7,7 @@ namespace ARC {
 
 using Real = double;
 
+bool approxEqual(Real val1, Real val2);
 Real clamp(Real value, Real min, Real max);
 Real deg2rad(Real angleInDegs);
 Real rad2deg(Real angleInRads);

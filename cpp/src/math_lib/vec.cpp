@@ -19,6 +19,13 @@ Real rad2deg(Real angleInRads) {
     return (angleInRads / M_PI) * 180.0;
 }
 
+constexpr ARC::Real HYSTERESIS = 0.0000001;
+bool approxEqual(Real val1, Real val2) {
+    if(val1 - HYSTERESIS > val2) return false;
+    if(val1 + HYSTERESIS < val2) return false;
+    return true;
+}
+
 vec3::vec3()
     : x(0.0), y(0.0), z(0.0)
 {}

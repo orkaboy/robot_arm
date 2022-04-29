@@ -87,15 +87,11 @@ void FABRIK::Backward(const vec3& root) {
         thisBoneInnerToOuterUV = thisBoneInnerToOuterUV.projOntoPlane(relativeHingeRotationAxis);
 
         // TODO rotation limits
-
-/*
-        // Constrain rotation about reference axis if required
-        float cwConstraintDegs   = -thisBoneJoint.getHingeClockwiseConstraintDegs();
-        float acwConstraintDegs  =  thisBoneJoint.getHingeAnticlockwiseConstraintDegs();
-        if ( !( Utils.approximatelyEquals(cwConstraintDegs, -FabrikJoint3D.MAX_CONSTRAINT_ANGLE_DEGS, 0.001f) ) &&
-                !( Utils.approximatelyEquals(acwConstraintDegs, FabrikJoint3D.MAX_CONSTRAINT_ANGLE_DEGS, 0.001f) ) )
-        {
-            // Calc. the reference axis in local space
+        if(
+            !ARC::approxEqual(link.mCWAngleLimit, -M_PI) &&
+            !ARC::approxEqual(link.mCCWAngleLimit, M_PI)
+        ) {
+            /*
             Vec3f relativeHingeReferenceAxis = m.times( thisBoneJoint.getHingeReferenceAxis() ).normalise();
             
             // Get the signed angle (about the hinge rotation axis) between the hinge reference axis and the hinge-rotation aligned bone UV
@@ -111,8 +107,8 @@ void FABRIK::Backward(const vec3& root) {
             {	
                 thisBoneInnerToOuterUV = Vec3f.rotateAboutAxisDegs(relativeHingeReferenceAxis, cwConstraintDegs, relativeHingeRotationAxis).normalise();			        		
             }
+            */
         }
-*/
 
         link2.mPos = link.mPos + thisBoneInnerToOuterUV * link.mLen;
 
