@@ -6,26 +6,28 @@ enum class Tests {
 };
 
 auto FABRIKLinkConstruct() -> Status {
-    ARC::vec3 pos(1, 2, 3);
-    ARC::Real len = 4;
-    ARC::vec3 hingeAxis(1, 0, 0);
     {
+        ARC::vec3 pos(1, 2, 3);
+        ARC::Real len = 4;
+        ARC::vec3 hingeAxis(1, 0, 0);
         ARC::FABRIK::Link link(pos, len, hingeAxis);
-        assert_float(link.mPos.x, pos.x);
-        assert_float(link.mPos.y, pos.y);
-        assert_float(link.mPos.z, pos.z);
+        assert_vec3(link.mPos, pos);
         assert_float(link.mLen, len);
-        assert_float(link.mHingeAxis.x, hingeAxis.x);
-        assert_float(link.mHingeAxis.y, hingeAxis.y);
-        assert_float(link.mHingeAxis.z, hingeAxis.z);
+        assert_vec3(link.mHingeAxis, hingeAxis);
         assert_float(link.mCWAngleLimit, -M_PI);
         assert_float(link.mCCWAngleLimit, M_PI);
     }
 
     {
+        ARC::vec3 pos(5, 6, 7);
+        ARC::Real len = 2;
+        ARC::vec3 hingeAxis(0, 1, 2);
         ARC::Real CWAngleLimit = -M_PI / 2;
-        ARC::Real CCWAngleLimit = M_PI / 2;
+        ARC::Real CCWAngleLimit = M_PI / 3;
         ARC::FABRIK::Link link(pos, len, hingeAxis, CWAngleLimit, CCWAngleLimit);
+        assert_vec3(link.mPos, pos);
+        assert_float(link.mLen, len);
+        assert_vec3(link.mHingeAxis, hingeAxis);
         assert_float(link.mCWAngleLimit, CWAngleLimit);
         assert_float(link.mCCWAngleLimit, CCWAngleLimit);
     }

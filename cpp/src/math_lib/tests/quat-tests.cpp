@@ -23,29 +23,19 @@ enum class Tests {
 auto QuatConstruct() -> Status {
     const ARC::quat q1;
     assert_float(q1.s, 0.0);
-    assert_float(q1.v.x, 0.0);
-    assert_float(q1.v.y, 0.0);
-    assert_float(q1.v.z, 0.0);
+    assert_vec3(q1.v, {0, 0, 0});
     const ARC::quat q2(1,2,3,4);
     assert_float(q2.s, 1);
-    assert_float(q2.v.x, 2);
-    assert_float(q2.v.y, 3);
-    assert_float(q2.v.z, 4);
+    assert_vec3(q2.v, {2, 3, 4});
     const ARC::quat q3(1, {2,3,4});
     assert_float(q3.s, 1);
-    assert_float(q3.v.x, 2);
-    assert_float(q3.v.y, 3);
-    assert_float(q3.v.z, 4);
+    assert_vec3(q3.v, {2, 3, 4});
     const ARC::quat q4(q3);
     assert_float(q4.s, 1);
-    assert_float(q4.v.x, 2);
-    assert_float(q4.v.y, 3);
-    assert_float(q4.v.z, 4);
+    assert_vec3(q4.v, {2, 3, 4});
     const ARC::quat q5 = q3;
     assert_float(q5.s, 1);
-    assert_float(q5.v.x, 2);
-    assert_float(q5.v.y, 3);
-    assert_float(q5.v.z, 4);
+    assert_vec3(q5.v, {2, 3, 4});
     return Status::Ok;
 }
 
@@ -64,19 +54,13 @@ auto QuatAdd() -> Status {
     const ARC::quat q2(5, 6, 7, 8);
     ARC::quat q3 = q1 + q2;
     assert_float(q3.s, 6);
-    assert_float(q3.v.x, 8);
-    assert_float(q3.v.y, 10);
-    assert_float(q3.v.z, 12);
+    assert_vec3(q3.v, {8, 10, 12});
     q3 = q2 + q1;
     assert_float(q3.s, 6);
-    assert_float(q3.v.x, 8);
-    assert_float(q3.v.y, 10);
-    assert_float(q3.v.z, 12);
+    assert_vec3(q3.v, {8, 10, 12});
     q3 += q1;
     assert_float(q3.s, 7);
-    assert_float(q3.v.x, 10);
-    assert_float(q3.v.y, 13);
-    assert_float(q3.v.z, 16);
+    assert_vec3(q3.v, {10, 13, 16});
     return Status::Ok;
 }
 
@@ -85,20 +69,13 @@ auto QuatSub() -> Status {
     const ARC::quat q2(4, 3, 2, 1);
     ARC::quat q3 = q1 - q2;
     assert_float(q3.s, 1);
-    assert_float(q3.v.x, 3);
-    assert_float(q3.v.y, 5);
-    assert_float(q3.v.z, 7);
+    assert_vec3(q3.v, {3, 5, 7});
     q3 -= q2;
     assert_float(q3.s, -3);
-    assert_float(q3.v.x, 0);
-    assert_float(q3.v.y, 3);
-    assert_float(q3.v.z, 6);
+    assert_vec3(q3.v, {0, 3, 6});
     const ARC::quat _q1 = -q1;
     assert_float(_q1.s, -5);
-    assert_float(_q1.v.x, -6);
-    assert_float(_q1.v.y, -7);
-    assert_float(_q1.v.z, -8);
-
+    assert_vec3(_q1.v, {-6, -7, -8});
     return Status::Ok;
 }
 
@@ -115,52 +92,34 @@ auto QuatMul() -> Status {
     // ij = -ji = k
     const ARC::quat ij = i * j;
     assert_float(ij.s, k.s);
-    assert_float(ij.v.x, k.v.x);
-    assert_float(ij.v.y, k.v.y);
-    assert_float(ij.v.z, k.v.z);
+    assert_vec3(ij.v, k.v);
     const ARC::quat _ji = -j * i;
     assert_float(_ji.s, k.s);
-    assert_float(_ji.v.x, k.v.x);
-    assert_float(_ji.v.y, k.v.y);
-    assert_float(_ji.v.z, k.v.z);
+    assert_vec3(_ji.v, k.v);
     // jk = -kj = i
     const ARC::quat jk = j * k;
     assert_float(jk.s, i.s);
-    assert_float(jk.v.x, i.v.x);
-    assert_float(jk.v.y, i.v.y);
-    assert_float(jk.v.z, i.v.z);
+    assert_vec3(jk.v, i.v);
     const ARC::quat _kj = -k * j;
     assert_float(_kj.s, i.s);
-    assert_float(_kj.v.x, i.v.x);
-    assert_float(_kj.v.y, i.v.y);
-    assert_float(_kj.v.z, i.v.z);
+    assert_vec3(_kj.v, i.v);
     // ki = -ik = j
     const ARC::quat ki = k * i;
     assert_float(ki.s, j.s);
-    assert_float(ki.v.x, j.v.x);
-    assert_float(ki.v.y, j.v.y);
-    assert_float(ki.v.z, j.v.z);
+    assert_vec3(ki.v, j.v);
     const ARC::quat _ik = -i * k;
     assert_float(_ik.s, j.s);
-    assert_float(_ik.v.x, j.v.x);
-    assert_float(_ik.v.y, j.v.y);
-    assert_float(_ik.v.z, j.v.z);
+    assert_vec3(_ik.v, j.v);
     // i^2 = j^2 = k^2 = -1
     const ARC::quat ii = i*i;
     assert_float(ii.s, minus1.s);
-    assert_float(ii.v.x, minus1.v.x);
-    assert_float(ii.v.y, minus1.v.y);
-    assert_float(ii.v.z, minus1.v.z);
+    assert_vec3(ii.v, minus1.v);
     const ARC::quat jj = j*j;
     assert_float(jj.s, minus1.s);
-    assert_float(jj.v.x, minus1.v.x);
-    assert_float(jj.v.y, minus1.v.y);
-    assert_float(jj.v.z, minus1.v.z);
+    assert_vec3(jj.v, minus1.v);
     const ARC::quat kk = k*k;
     assert_float(kk.s, minus1.s);
-    assert_float(kk.v.x, minus1.v.x);
-    assert_float(kk.v.y, minus1.v.y);
-    assert_float(kk.v.z, minus1.v.z);
+    assert_vec3(kk.v, minus1.v);
     return Status::Ok;
 }
 
@@ -168,14 +127,10 @@ auto QuatScalarMul() -> Status {
     const ARC::quat q1(1, 2, 3, 4);
     ARC::quat q2 = q1 * 3;
     assert_float(q2.s, 3);
-    assert_float(q2.v.x, 6);
-    assert_float(q2.v.y, 9);
-    assert_float(q2.v.z, 12);
+    assert_vec3(q2.v, {6, 9, 12});
     q2 *= 2;
     assert_float(q2.s, 6);
-    assert_float(q2.v.x, 12);
-    assert_float(q2.v.y, 18);
-    assert_float(q2.v.z, 24);
+    assert_vec3(q2.v, {12, 18, 24});
     return Status::Ok;
 }
 
@@ -194,18 +149,13 @@ auto QuatNormalize() -> Status {
     const ARC::quat q0;
     const ARC::quat q0_normalized = q0.normalize();
     assert_float(q0_normalized.s, 0);
-    assert_float(q0_normalized.v.x, 0);
-    assert_float(q0_normalized.v.y, 0);
-    assert_float(q0_normalized.v.z, 0);
+    assert_vec3(q0_normalized.v, {0, 0, 0});
 
     const ARC::quat q1(2, 3, 4, 5);
     const ARC::Real norm = q1.norm();
     const ARC::quat q1_normalized = q1.normalize();
     assert_float(q1_normalized.s, 2 / norm);
-    assert_float(q1_normalized.v.x, 3 / norm);
-    assert_float(q1_normalized.v.y, 4 / norm);
-    assert_float(q1_normalized.v.z, 5 / norm);
-
+    assert_vec3(q1_normalized.v, {3 / norm, 4 / norm, 5 / norm});
     return Status::Ok;
 }
 

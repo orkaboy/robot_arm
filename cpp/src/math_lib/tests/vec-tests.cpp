@@ -85,18 +85,11 @@ auto Rad2Deg() -> Status {
 
 auto Vec3Axis() -> Status {
     const ARC::vec3 x = ARC::vec3::X();
-    assert(x.x == 1.0);
-    assert(x.y == 0.0);
-    assert(x.z == 0.0);
+    assert_vec3(x, {1, 0, 0});
     const ARC::vec3 y = ARC::vec3::Y();
-    assert(y.x == 0.0);
-    assert(y.y == 1.0);
-    assert(y.z == 0.0);
+    assert_vec3(y, {0, 1, 0});
     const ARC::vec3 z = ARC::vec3::Z();
-    assert(z.x == 0.0);
-    assert(z.y == 0.0);
-    assert(z.z == 1.0);
-    
+    assert_vec3(z, {0, 0, 1});
     return Status::Ok;
 }
 
@@ -116,15 +109,10 @@ auto Vec3Add() -> Status {
     const ARC::vec3 v2(4, 5, 6);
     // operator+
     ARC::vec3 v3 = v1 + v2;
-    assert(v3.x == 5);
-    assert(v3.y == 7);
-    assert(v3.z == 9);
+    assert_vec3(v3, {5, 7, 9});
     // operator+=
     v3 += ARC::vec3(1, 2, 3);
-    assert(v3.x == 6);
-    assert(v3.y == 9);
-    assert(v3.z == 12);
-
+    assert_vec3(v3, {6, 9, 12});
     return Status::Ok;
 }
 
@@ -133,20 +121,13 @@ auto Vec3Sub() -> Status {
     const ARC::vec3 v2(4, 5, 6);
     // operator-
     ARC::vec3 v3 = v1 - v2;
-    assert(v3.x == 2);
-    assert(v3.y == 4);
-    assert(v3.z == 6);
+    assert_vec3(v3, {2, 4, 6});
     // operator-=
     v3 -= ARC::vec3(1, 2, 3);
-    assert(v3.x == 1);
-    assert(v3.y == 2);
-    assert(v3.z == 3);
+    assert_vec3(v3, {1, 2, 3});
     // operator-(binary)
     const ARC::vec3 v4 = -v2;
-    assert(v4.x == -4);
-    assert(v4.y == -5);
-    assert(v4.z == -6);
-
+    assert_vec3(v4, {-4, -5, -6});
     return Status::Ok;
 }
 
@@ -154,23 +135,15 @@ auto Vec3Mul() -> Status {
     const ARC::vec3 v1(1, 1, 1);
     // operator*(Real)
     const ARC::vec3 v2 = v1 * 5;
-    assert(v2.x == 5);
-    assert(v2.y == 5);
-    assert(v2.z == 5);
+    assert_vec3(v2, {5, 5, 5});
     ARC::vec3 v3(2, 4, 6);
     ARC::vec3 v4 = v3 * 3;
-    assert(v4.x == 6);
-    assert(v4.y == 12);
-    assert(v4.z == 18);
+    assert_vec3(v4, {6, 12, 18});
     // operator*=(Real)
     v3 *= 2;
-    assert(v3.x == 4);
-    assert(v3.y == 8);
-    assert(v3.z == 12);
+    assert_vec3(v3, {4, 8, 12});
     v4 *= 0.5;
-    assert(v4.x == 3);
-    assert(v4.y == 6);
-    assert(v4.z == 9);
+    assert_vec3(v4, {3, 6, 9});
     return Status::Ok;
 }
 
@@ -178,14 +151,10 @@ auto Vec3Div() -> Status {
     const ARC::vec3 v1(1, 2, 3);
     // operator/(Real)
     ARC::vec3 v2 = v1 / 2;
-    assert(v2.x == 0.5);
-    assert(v2.y == 1);
-    assert(v2.z == 1.5);
+    assert_vec3(v2, {0.5, 1, 1.5});
     // operator/=(Real)
     v2 /= 2;
-    assert(v2.x == 0.25);
-    assert(v2.y == 0.5);
-    assert(v2.z == 0.75);
+    assert_vec3(v2, {0.25, 0.5, 0.75});
     return Status::Ok;
 }
 
@@ -207,13 +176,9 @@ auto Vec3Cross() -> Status {
     const ARC::vec3 x = ARC::vec3::X();
     const ARC::vec3 y = ARC::vec3::Y();
     ARC::vec3 z = x.cross(y);
-    assert(z.x == 0);
-    assert(z.y == 0);
-    assert(z.z == 1);
+    assert_vec3(z, {0, 0, 1});
     z = y.cross(x);
-    assert(z.x == 0);
-    assert(z.y == 0);
-    assert(z.z == -1);
+    assert_vec3(z, {0, 0, -1});
     return Status::Ok;
 }
 
@@ -224,17 +189,11 @@ auto Vec3Proj() -> Status {
     const ARC::vec3 v1(3, 5, 7);
     // Project v1 onto x
     const ARC::vec3 v2 = v1.proj(x);
-    assert(v2.x == 3);
-    assert(v2.y == 0);
-    assert(v2.z == 0);
+    assert_vec3(v2, {3, 0, 0});
     const ARC::vec3 v3 = v1.proj(y);
-    assert(v3.x == 0);
-    assert(v3.y == 5);
-    assert(v3.z == 0);
+    assert_vec3(v3, {0, 5, 0});
     const ARC::vec3 v4 = v1.proj(z);
-    assert(v4.x == 0);
-    assert(v4.y == 0);
-    assert(v4.z == 7);
+    assert_vec3(v4, {0, 0, 7});
     return Status::Ok;
 }
 
@@ -245,17 +204,11 @@ auto Vec3ProjOntoPlane() -> Status {
     const ARC::vec3 v1(3, 5, 7);
     // Project v1 onto the planes described by normals
     const ARC::vec3 vx = v1.projOntoPlane(x);
-    assert_float(vx.x, 0);
-    assert_float(vx.y, 0.5812381937);
-    assert_float(vx.z, 0.8137334712);
+    assert_vec3(vx, {0, 0.5812381937, 0.8137334712});
     const ARC::vec3 vy = v1.projOntoPlane(y);
-    assert_float(vy.x, 0.3939192986);
-    assert_float(vy.y, 0);
-    assert_float(vy.z, 0.9191450300);
+    assert_vec3(vy, {0.3939192986, 0, 0.9191450300});
     const ARC::vec3 vz = v1.projOntoPlane(z);
-    assert_float(vz.x, 0.5144957554);
-    assert_float(vz.y, 0.8574929257);
-    assert_float(vz.z, 0);
+    assert_vec3(vz, {0.5144957554, 0.8574929257, 0});
     return Status::Ok;
 }
 
@@ -269,14 +222,10 @@ auto Vec3Norm() -> Status {
 auto Vec3Normalize() -> Status {
     const ARC::vec3 v1(3, 4, 0);
     const ARC::vec3 v2 = v1.normalize();
-    assert_float(v2.x, 0.6);
-    assert_float(v2.y, 0.8);
-    assert_float(v2.z, 0.0);
+    assert_vec3(v2, {0.6, 0.8, 0});
     const ARC::vec3 v3(2, 1, 3);
     const ARC::vec3 v4 = v3.normalize();
-    assert_float(v4.x, 0.5345224838248488);
-    assert_float(v4.y, 0.2672612419124244);
-    assert_float(v4.z, 0.8017837257372732);
+    assert_vec3(v4, {0.5345224838248488, 0.2672612419124244, 0.8017837257372732});
     return Status::Ok;
 }
 
@@ -310,13 +259,9 @@ auto Vec3Rotate() -> Status {
     const ARC::vec3 x = ARC::vec3::X();
     const ARC::vec3 y = ARC::vec3::Y();
     const ARC::vec3 x_inv = x.rotate(M_PI, y); // rotate 180 degrees, will point to -X
-    assert_float(x_inv.x, -1);
-    assert_float(x_inv.y, 0);
-    assert_float(x_inv.z, 0);
+    assert_vec3(x_inv, {-1, 0, 0});
     const ARC::vec3 x_rot = x.rotate(M_PI/2, y); // rotate 90 degrees, will point to -Z
-    assert_float(x_rot.x, 0);
-    assert_float(x_rot.y, 0);
-    assert_float(x_rot.z, -1);
+    assert_vec3(x_rot, {0, 0, -1});
     return Status::Ok;
 }
 
