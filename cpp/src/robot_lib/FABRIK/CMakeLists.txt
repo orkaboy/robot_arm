@@ -1,3 +1,4 @@
+add_subdirectory(tests)
 
 add_library(fabrik fabrik.cpp)
 target_include_directories(fabrik PUBLIC
