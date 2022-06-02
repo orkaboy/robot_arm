@@ -85,6 +85,7 @@ void FABRIK::Backward(const vec3& root) {
             relativeHingeRotationAxis = link.mHingeAxis;
         }
 
+        // TODO WIP
         fmt::print("  relativeHingeRotationAxis: {}\n", relativeHingeRotationAxis);
         fmt::print("  thisBoneInnerToOuterUV: {}\n", thisBoneInnerToOuterUV);
         //thisBoneInnerToOuterUV = thisBoneInnerToOuterUV.projOntoPlane(relativeHingeRotationAxis);
