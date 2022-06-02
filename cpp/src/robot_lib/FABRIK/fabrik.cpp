@@ -59,6 +59,7 @@ void FABRIK::Forward(const Goal& target) {
         // /* Find the new joint position pi */
         // link.mPos = link2.mPos * (1 - lambda) + link.mPos * lambda;
     }
+    fmt::print("Forward: {}\n", mLinks.back().mPos);
 }
 
 void FABRIK::Backward(const vec3& root) {
@@ -84,7 +85,11 @@ void FABRIK::Backward(const vec3& root) {
             relativeHingeRotationAxis = link.mHingeAxis;
         }
 
-        thisBoneInnerToOuterUV = thisBoneInnerToOuterUV.projOntoPlane(relativeHingeRotationAxis);
+        fmt::print("  relativeHingeRotationAxis: {}\n", relativeHingeRotationAxis);
+        fmt::print("  thisBoneInnerToOuterUV: {}\n", thisBoneInnerToOuterUV);
+        //thisBoneInnerToOuterUV = thisBoneInnerToOuterUV.projOntoPlane(relativeHingeRotationAxis);
+        thisBoneInnerToOuterUV = thisBoneInnerToOuterUV.proj(relativeHingeRotationAxis).normalize();
+        fmt::print("  proj thisBoneInnerToOuterUV: {}\n", thisBoneInnerToOuterUV);
 
         // TODO rotation limits
         if(
@@ -118,6 +123,7 @@ void FABRIK::Backward(const vec3& root) {
         // /* Find the new joint positions pi */
         // link2.mPos = link.mPos * (1 - lambda) + link2.mPos * lambda;
     }
+    fmt::print("Backward: {}\n", mLinks.back().mPos);
 }
 
 std::vector<vec3> FABRIK::Calculate(const Goal& target) {
@@ -125,18 +131,19 @@ std::vector<vec3> FABRIK::Calculate(const Goal& target) {
     /* Check distance between root and target */
     auto dist = (target - root).norm();
     /* Is the target within reach? */
-    if(dist >= mReach) {
-        for(auto i = 0u; i < mLinks.size() - 1; ++i) {
-            auto link = mLinks[i];
-            /* Find distance ri between target and the joint */
-            auto ri = (target - link.mPos).norm();
-            auto lambda = link.mLen / ri;
-            /* Find the new joint position by projecting it towards the target */
-            mLinks[i+1].mPos = link.mPos * (1 - lambda) + target * lambda;
-        }
-    }
-    /* Target is reachable */
-    else {
+//    if(dist >= mReach) {
+//        // TODO Must obey constraints!
+//        for(auto i = 0u; i < mLinks.size() - 1; ++i) {
+//            auto link = mLinks[i];
+//            /* Find distance ri between target and the joint */
+//            auto ri = (target - link.mPos).norm();
+//            auto lambda = link.mLen / ri;
+//            /* Find the new joint position by projecting it towards the target */
+//            mLinks[i+1].mPos = link.mPos * (1 - lambda) + target * lambda;
+//        }
+//    }
+//    /* Target is reachable */
+//    else {
         /* Check distance between end effector pn and the target t is greater than the tolerance */
         auto diff = (target - mLinks.back().mPos).norm();
         auto iter = 0u;
@@ -146,8 +153,9 @@ std::vector<vec3> FABRIK::Calculate(const Goal& target) {
             Backward(root);
             diff = (target - mLinks.back().mPos).norm();
             ++iter;
+            fmt::print("Iter {}, diff = {}\n", iter, diff);
         }
-    }
+//    }
 
     /* Return result */
     std::vector<vec3> ret;

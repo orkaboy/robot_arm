@@ -5,6 +5,7 @@ enum class Tests {
     FABRIKLinkConstruct = 0,
     FABRIKConstruct = 1,
     FABRIKConstraints = 2,
+    FABRIKForwardKinematics = 3,
 };
 
 auto FABRIKLinkConstruct() -> Status {
@@ -66,7 +67,37 @@ auto FABRIKConstraints() -> Status {
     };
     ARC::FABRIK ik(links);
 
+    std::vector<ARC::FABRIK::Goal> goals = {
+        {0.0, 0.0, 1.0},
+        {4.0, 2.0, 1.0},
+        {2.0, 4.0, 6.0},
+        {0.0, 0.0, 3.0},
+        {-4.0, -2.0, 2.0},
+        {2.0, -1.0, 10.0},
+    };
+    for(const auto& g : goals) {
+        ik.Calculate(g);
+        ARC::FABRIK::Goal result = ik.ForwardKinematics();
+        fmt::print("Res: {}\n", result);
+        assert_vec3(result, {0.0, 0.0, 3.0});
+    }
+
     return Status::Err;
+}
+
+auto FABRIKForwardKinematics() -> Status {
+    const std::vector<ARC::FABRIK::Link> links = {
+        {{0,0,0}, 3, {0,0,1}},
+        {{0,0,3}, 2, {1,0,0}},
+        {{0,2,3}, 2, {0,0,1}},
+    };
+    const ARC::FABRIK ik(links);
+
+    ARC::FABRIK::Goal goal = ik.ForwardKinematics();
+
+    assert_vec3(goal, {0,2,3});
+
+    return Status::Ok;
 }
 
 auto main(int argc, char* argv[]) -> int {
@@ -85,6 +116,8 @@ auto main(int argc, char* argv[]) -> int {
         ret = FABRIKConstruct(); break;
     case Tests::FABRIKConstraints:
         ret = FABRIKConstraints(); break;
+    case Tests::FABRIKForwardKinematics:
+        ret = FABRIKForwardKinematics(); break;
     default:
         break;
     }
