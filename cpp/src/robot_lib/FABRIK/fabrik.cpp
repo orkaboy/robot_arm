@@ -88,8 +88,7 @@ void FABRIK::Backward(const vec3& root) {
         // TODO WIP
         fmt::print("  relativeHingeRotationAxis: {}\n", relativeHingeRotationAxis);
         fmt::print("  thisBoneInnerToOuterUV: {}\n", thisBoneInnerToOuterUV);
-        //thisBoneInnerToOuterUV = thisBoneInnerToOuterUV.projOntoPlane(relativeHingeRotationAxis);
-        thisBoneInnerToOuterUV = thisBoneInnerToOuterUV.proj(relativeHingeRotationAxis).normalize();
+        thisBoneInnerToOuterUV = thisBoneInnerToOuterUV.projOntoPlane(relativeHingeRotationAxis);
         fmt::print("  proj thisBoneInnerToOuterUV: {}\n", thisBoneInnerToOuterUV);
 
         // TODO rotation limits

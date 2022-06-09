@@ -61,28 +61,32 @@ auto FABRIKConstruct() -> Status {
 }
 
 auto FABRIKConstraints() -> Status {
+    const ARC::Real len = 2.0;
     const std::vector<ARC::FABRIK::Link> links = {
-        {{0,0,0}, 3, {0,0,1}},
-        {{0,0,3}, 2, {1,0,0}},
+        {{0,0,3}, len, {0,0,1}},
+        {{len,0,3}, 0, {1,0,0}},
     };
     ARC::FABRIK ik(links);
 
     std::vector<ARC::FABRIK::Goal> goals = {
-        {0.0, 0.0, 1.0},
+        {0.001, 0.0, 1.0},
         {4.0, 2.0, 1.0},
         {2.0, 4.0, 6.0},
-        {0.0, 0.0, 3.0},
+        {0.001, 0.0, 3.0},
         {-4.0, -2.0, 2.0},
         {2.0, -1.0, 10.0},
     };
     for(const auto& g : goals) {
         ik.Calculate(g);
         ARC::FABRIK::Goal result = ik.ForwardKinematics();
-        fmt::print("Res: {}\n", result);
-        assert_vec3(result, {0.0, 0.0, 3.0});
+        assert_float(result.z, 3.0);
+        ARC::vec3 base(0.0, 0.0, 3.0);
+        ARC::Real dist = (result - base).norm();
+        // fmt::print("target: {} res: {}, {}\n", g, result, dist);
+        assert_float(dist, len);
     }
 
-    return Status::Err;
+    return Status::Ok;
 }
 
 auto FABRIKForwardKinematics() -> Status {
