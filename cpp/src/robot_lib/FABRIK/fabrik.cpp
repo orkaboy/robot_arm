@@ -47,12 +47,19 @@ void FABRIK::Forward(const Goal& target) {
             relativeHingeRotationAxis = link.mHingeAxis;
         }
 
-        // TODO rotation limits?!
-
         thisBoneOuterToInnerUV = thisBoneOuterToInnerUV.projOntoPlane(relativeHingeRotationAxis);
+
+        // TODO rotation limits
+        if(
+            !ARC::approxEqual(link.mCWAngleLimit, -M_PI) &&
+            !ARC::approxEqual(link.mCCWAngleLimit, M_PI)
+        ) {
+
+        }
 
         link.mPos = link2.mPos + thisBoneOuterToInnerUV * link.mLen;
 
+        // OLD REMOVE
         // /* Find the distance ri between the new joint position pi+1 and the joint pi */
         // auto ri = (link2.mPos - link.mPos).norm();
         // auto lambda = link.mLen / ri;
@@ -70,8 +77,6 @@ void FABRIK::Backward(const vec3& root) {
     for(auto i = 0u; i < mLinks.size() - 1; ++i) {
         auto link = mLinks[i];
         auto &link2 = mLinks[i+1];
-
-        /// TODO Joint constraints
 
         /* Calculate joint constraints */
         auto thisBoneInnerToOuterUV = (link2.mPos - link.mPos).normalize(); // Unit vector from inner to outer
@@ -117,6 +122,7 @@ void FABRIK::Backward(const vec3& root) {
 
         link2.mPos = link.mPos + thisBoneInnerToOuterUV * link.mLen;
 
+        // OLD REMOVE
         // /* Find the distance ri between the new joint position pi and the joint pi+1 */
         // auto ri = (link.mPos - link2.mPos).norm();
         // auto lambda = link.mLen / ri;
@@ -131,6 +137,7 @@ std::vector<vec3> FABRIK::Calculate(const Goal& target) {
     /* Check distance between root and target */
     auto dist = (target - root).norm();
     /* Is the target within reach? */
+    // OLD REMOVE, doesn't work with constraints!
 //    if(dist >= mReach) {
 //        // TODO Must obey constraints!
 //        for(auto i = 0u; i < mLinks.size() - 1; ++i) {
