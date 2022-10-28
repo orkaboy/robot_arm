@@ -56,7 +56,7 @@ RobotArm::RobotArm(const std::string& config_file) {
             joints.emplace_back(id, mode, lim_min, lim_max);
         }
     }
-    
+
     mPortHandler = dynamixel::PortHandler::getPortHandler(mDevice.c_str());
     mPacketHandler = dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
 
@@ -72,14 +72,17 @@ RobotArm::RobotArm(const std::string& config_file) {
 
     const auto LIMB_LEN = 0.1; // In m
     const auto endEff = vec3(0,LIMB_LEN,LIMB_LEN);
-    std::vector<FABRIK::Link> links = {
+    const std::vector<FABRIK::Joint> ikJoints = {
+        {} //TODO:
+    };
+    const std::vector<FABRIK::Link> links = {
         {vec3(0,0,0), 0.03, vec3(0,0,1)}, // Root
         {vec3(0,0,0.03), LIMB_LEN, vec3(1,0,0)}, // Root
         {vec3(0,0,LIMB_LEN+0.03), LIMB_LEN, vec3(1,0,0)},
         {endEff, 0.0, vec3(1,0,0)} // End effector
     };
-    
-    mIk = new FABRIK(links);
+
+    mIk = new FABRIK(ikJoints, links);
 
     for(auto j : joints) {
         auto servo = new AX12A(mPortHandler, mPacketHandler, j.id);

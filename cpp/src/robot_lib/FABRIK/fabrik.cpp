@@ -5,8 +5,9 @@
 
 namespace ARC {
 
-FABRIK::FABRIK(const std::vector<Link>& links, Real tolerance, uint32_t iterLimit)
-    : mLinks(links)
+FABRIK::FABRIK(const std::vector<Joint>& joints, const std::vector<Link>& links, Real tolerance, uint32_t iterLimit)
+    : mJoints(joints)
+    , mLinks(links)
     , mTolerance(tolerance)
     , mIterLimit(iterLimit)
 {

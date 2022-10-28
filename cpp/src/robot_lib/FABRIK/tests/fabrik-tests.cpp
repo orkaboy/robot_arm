@@ -39,14 +39,20 @@ auto FABRIKLinkConstruct() -> Status {
 
 auto FABRIKConstruct() -> Status {
     {
+        const std::vector<ARC::FABRIK::Joint> joints = {
+            {}
+        };
         const std::vector<ARC::FABRIK::Link> links = {
             {{0,0,0}, 3, {0,0,1}},
             {{0,0,3}, 2, {1,0,0}},
         };
-        ARC::FABRIK ik(links);
+        ARC::FABRIK ik(joints, links);
     }
 
     {
+        const std::vector<ARC::FABRIK::Joint> joints = {
+            {}
+        };
         const std::vector<ARC::FABRIK::Link> links = {
             {{0,0,0}, 2, {1,0,0}},
             {{0,2,0}, 3, {0,0,1}},
@@ -54,7 +60,7 @@ auto FABRIKConstruct() -> Status {
         };
         ARC::Real tolerance = 0.00001;
         uint32_t iterLimit = 10;
-        ARC::FABRIK ik(links, tolerance, iterLimit);
+        ARC::FABRIK ik(joints, links, tolerance, iterLimit);
     }
 
     return Status::Err;
@@ -62,11 +68,14 @@ auto FABRIKConstruct() -> Status {
 
 auto FABRIKConstraints() -> Status {
     const ARC::Real len = 2.0;
+    const std::vector<ARC::FABRIK::Joint> joints = {
+        {}
+    };
     const std::vector<ARC::FABRIK::Link> links = {
         {{0,0,3}, len, {0,0,1}},
         {{len,0,3}, 0, {1,0,0}},
     };
-    ARC::FABRIK ik(links);
+    ARC::FABRIK ik(joints, links);
 
     std::vector<ARC::FABRIK::Goal> goals = {
         {0.001, 0.0, 1.0},
@@ -90,12 +99,15 @@ auto FABRIKConstraints() -> Status {
 }
 
 auto FABRIKForwardKinematics() -> Status {
+    const std::vector<ARC::FABRIK::Joint> joints = {
+        {}
+    };
     const std::vector<ARC::FABRIK::Link> links = {
         {{0,0,0}, 3, {0,0,1}},
         {{0,0,3}, 2, {1,0,0}},
         {{0,2,3}, 2, {0,0,1}},
     };
-    const ARC::FABRIK ik(links);
+    const ARC::FABRIK ik(joints, links);
 
     ARC::FABRIK::Goal goal = ik.ForwardKinematics();
 

@@ -47,7 +47,7 @@ public:
     };
 
     /* Assume scale is in m, tolerance is 0.01mm */
-    FABRIK(const std::vector<Link>& links, Real tolerance = 0.00001, uint32_t iterLimit = 10);
+    FABRIK(const std::vector<Joint>& joints, const std::vector<Link>& links, Real tolerance = 0.00001, uint32_t iterLimit = 10);
 
     void SetPositions(const std::vector<vec3>& positions);
 
@@ -58,6 +58,7 @@ private:
     void Forward(const Goal& target);
     void Backward(const vec3& root);
 
+    std::vector<Joint> mJoints;
     std::vector<Link> mLinks;
     Real mTolerance;
     uint32_t mIterLimit;
