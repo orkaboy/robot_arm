@@ -6,6 +6,7 @@
 
 #include <thread>
 #include <chrono>
+#include <filesystem>
 
 auto main(int argc, char* argv[]) -> int {
     std::string config_file = "config/config.yml";
@@ -29,6 +30,11 @@ auto main(int argc, char* argv[]) -> int {
 			return -1;
 		}
 	}
+
+    if(!std::filesystem::exists(config_file)) {
+        fmt::print("Missing file {}\n", config_file);
+        return -1;
+    }
 
     ARC::RobotArm arm(config_file);
     if(!arm.IsOK()) {
