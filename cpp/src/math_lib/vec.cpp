@@ -122,7 +122,7 @@ vec3 vec3::projOntoPlane(const vec3& normal) const {
     // Projection of vector b onto plane with normal n is defined as: b - ( b.n / ( |n| squared )) * n
     vec3 b = normalize();
     vec3 n = normal.normalize();
-    return (b - n * b.dot(normal)).normalize(); 
+    return (b - n * b.dot(normal)).normalize();
 }
 
 Real vec3::norm() const {

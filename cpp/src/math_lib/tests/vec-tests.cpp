@@ -97,7 +97,7 @@ auto Vec3Str() -> Status {
     const ARC::vec3 v;
     std::string str = fmt::format("{}", v);
     assert(str == "(0 0 0)");
-    
+
     const ARC::vec3 v1(1, 2, 3);
     str = fmt::format("{}", v1);
     assert(str == "(1 2 3)");

@@ -45,7 +45,7 @@ auto FABRIKConstruct() -> Status {
         };
         ARC::FABRIK ik(links);
     }
-    
+
     {
         const std::vector<ARC::FABRIK::Link> links = {
             {{0,0,0}, 2, {1,0,0}},

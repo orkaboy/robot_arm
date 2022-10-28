@@ -96,19 +96,19 @@ void FABRIK::Backward(const vec3& root) {
         ) {
             /*
             Vec3f relativeHingeReferenceAxis = m.times( thisBoneJoint.getHingeReferenceAxis() ).normalise();
-            
+
             // Get the signed angle (about the hinge rotation axis) between the hinge reference axis and the hinge-rotation aligned bone UV
             // Note: ACW rotation is positive, CW rotation is negative.
             float signedAngleDegs = Vec3f.getSignedAngleBetweenDegs(relativeHingeReferenceAxis, thisBoneInnerToOuterUV, relativeHingeRotationAxis);
-            
+
             // Make our bone inner-to-outer UV the hinge reference axis rotated by its maximum clockwise or anticlockwise rotation as required
             if (signedAngleDegs > acwConstraintDegs)
-            {	
-                thisBoneInnerToOuterUV = Vec3f.rotateAboutAxisDegs(relativeHingeReferenceAxis, acwConstraintDegs, relativeHingeRotationAxis).normalise();		        		
+            {
+                thisBoneInnerToOuterUV = Vec3f.rotateAboutAxisDegs(relativeHingeReferenceAxis, acwConstraintDegs, relativeHingeRotationAxis).normalise();
             }
             else if (signedAngleDegs < cwConstraintDegs)
-            {	
-                thisBoneInnerToOuterUV = Vec3f.rotateAboutAxisDegs(relativeHingeReferenceAxis, cwConstraintDegs, relativeHingeRotationAxis).normalise();			        		
+            {
+                thisBoneInnerToOuterUV = Vec3f.rotateAboutAxisDegs(relativeHingeReferenceAxis, cwConstraintDegs, relativeHingeRotationAxis).normalise();
             }
             */
         }
@@ -122,7 +122,7 @@ std::vector<vec3> FABRIK::Calculate(const Goal& target) {
     auto root = mLinks.front().mPos;
     /* Check distance between root and target */
     auto dist = (target - root).norm();
-    
+
     /* Check distance between end effector pn and the target t is greater than the tolerance */
     auto diff = (target - mLinks.back().mPos).norm();
     auto iter = 0u;

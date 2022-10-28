@@ -27,11 +27,11 @@ mat3::mat3(
     data[0] = m0;
     data[3] = m3;
     data[6] = m6;
-    
+
     data[1] = m1;
     data[4] = m4;
     data[7] = m7;
-    
+
     data[2] = m2;
     data[5] = m5;
     data[8] = m8;
@@ -109,11 +109,11 @@ mat3 mat3::operator*(const mat3& m) const {
         data[0]*m.data[0] + data[3]*m.data[1] + data[6]*m.data[2],
         data[0]*m.data[3] + data[3]*m.data[4] + data[6]*m.data[5],
         data[0]*m.data[6] + data[3]*m.data[7] + data[6]*m.data[8],
-        
+
         data[1]*m.data[0] + data[4]*m.data[1] + data[7]*m.data[2],
         data[1]*m.data[3] + data[4]*m.data[4] + data[7]*m.data[5],
         data[1]*m.data[6] + data[4]*m.data[7] + data[7]*m.data[8],
-        
+
         data[2]*m.data[0] + data[5]*m.data[1] + data[8]*m.data[2],
         data[2]*m.data[3] + data[5]*m.data[4] + data[8]*m.data[5],
         data[2]*m.data[6] + data[5]*m.data[7] + data[8]*m.data[8]
@@ -150,11 +150,11 @@ mat3 mat3::inverse() const {
          (data[4]*data[8] - data[7]*data[5]),
         -(data[3]*data[8] - data[6]*data[5]),
          (data[3]*data[7] - data[6]*data[4]),
-        
+
         -(data[1]*data[8] - data[7]*data[2]),
          (data[0]*data[8] - data[6]*data[2]),
         -(data[0]*data[7] - data[6]*data[1]),
-        
+
          (data[1]*data[5] - data[4]*data[2]),
         -(data[0]*data[5] - data[3]*data[2]),
          (data[0]*data[4] - data[3]*data[1])

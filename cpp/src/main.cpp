@@ -54,7 +54,7 @@ auto main(int argc, char* argv[]) -> int {
     fmt::print("Moving to origin...\n");
     std::vector<ARC::Real> origin = {0,0,0,0,0,0};
     arm.SetJoints(origin);
-    
+
     using namespace std::chrono_literals;
 
     if(!ARC::DEBUG()) {
@@ -78,7 +78,7 @@ auto main(int argc, char* argv[]) -> int {
 
     using namespace std::chrono_literals;
     arm.MoveToPos(ARC::vec3(0.1, 0.1, 0.1), 1s);
-    
+
     std::this_thread::sleep_for(2s);
 
     fmt::print("Done! Shutting down...\n");
