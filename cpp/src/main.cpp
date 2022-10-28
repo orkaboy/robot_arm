@@ -26,13 +26,13 @@ auto main(int argc, char* argv[]) -> int {
             break;
         }
 		default:
-			fmt::print("Unsupported commandline argument: {}\n", c);
+			fmt::print("Unsupported commandline argument: '{}'\n", c);
 			return -1;
 		}
 	}
 
     if(!std::filesystem::exists(config_file)) {
-        fmt::print("Missing file {}\n", config_file);
+        fmt::print("Missing config file '{}'\n", config_file);
         return -1;
     }
 
