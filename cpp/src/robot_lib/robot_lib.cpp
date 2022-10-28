@@ -73,13 +73,15 @@ RobotArm::RobotArm(const std::string& config_file) {
     const auto LIMB_LEN = 0.1; // In m
     const auto endEff = vec3(0,LIMB_LEN,LIMB_LEN);
     const std::vector<FABRIK::Joint> ikJoints = {
-        {} //TODO:
+        {vec3(0,0,0), vec3(0,0,1)}, // Root
+        {vec3(0,0,0.03), vec3(1,0,0)}, // Root
+        {vec3(0,0,LIMB_LEN+0.03), vec3(1,0,0)},
+        {endEff, vec3(1,0,0)}, // End effector
     };
     const std::vector<FABRIK::Link> links = {
-        {vec3(0,0,0), 0.03, vec3(0,0,1)}, // Root
-        {vec3(0,0,0.03), LIMB_LEN, vec3(1,0,0)}, // Root
-        {vec3(0,0,LIMB_LEN+0.03), LIMB_LEN, vec3(1,0,0)},
-        {endEff, 0.0, vec3(1,0,0)} // End effector
+        {0.03, 0, 1},
+        {LIMB_LEN, 1, 2},
+        {LIMB_LEN, 2, 3},
     };
 
     mIk = new FABRIK(ikJoints, links);

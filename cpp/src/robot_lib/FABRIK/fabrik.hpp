@@ -10,21 +10,13 @@ public:
     /* TODO add joint limits here */
     class Link {
     public:
-        Link(vec3 pos, Real len, vec3 hingeAxis, Real CWAngleLimit = -M_PI, Real CCWAngleLimit = M_PI, int originJointID = 0, int targetJointID = 0)
-            : mPos(pos)
-            , mLen(len)
-            , mHingeAxis(hingeAxis)
-            , mCWAngleLimit(CWAngleLimit)
-            , mCCWAngleLimit(CCWAngleLimit)
+        Link(Real len, int originJointID = 0, int targetJointID = 0)
+            : mLen(len)
             , mOriginJointID(originJointID)
             , mTargetJointID(targetJointID)
         {}
 
-        vec3 mHingeAxis{};
-        vec3 mPos{};
         Real mLen{};
-        Real mCWAngleLimit{};
-        Real mCCWAngleLimit{};
         int mOriginJointID{};
         int mTargetJointID{};
     };

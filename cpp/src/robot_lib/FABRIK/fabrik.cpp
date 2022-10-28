@@ -19,69 +19,73 @@ FABRIK::FABRIK(const std::vector<Joint>& joints, const std::vector<Link>& links,
 
 void FABRIK::SetPositions(const std::vector<vec3>& positions) {
     if(positions.size() != mLinks.size()) {
-        fmt::print("[FABRIK::SetPositions] positions array has different length({}) from Links({})\n", positions.size(), mLinks.size());
+        fmt::print("[FABRIK::SetPositions] positions array has different length({}) from Links({})\n", positions.size(), mJoints.size());
         return;
     }
 
     for(auto i = 0u; i < positions.size(); ++i) {
-        mLinks[i].mPos = positions[i];
+        mJoints[i].mPos = positions[i];
     }
 }
 
 void FABRIK::Forward(const Goal& target) {
     /* Forward reaching stage */
     /* Set end effector pn to target */
-    mLinks.back().mPos = target;
+    mJoints.back().mPos = target;
     /* Walk backwards through the chain */
-    for(int i = mLinks.size() - 2; i >= 0; --i) {
-        auto& link = mLinks[i];
-        auto link2 = mLinks[i+1];
+    for(int i = mLinks.size() - 1; i >= 0; --i) {
+        auto link = mLinks[i];
+        auto& joint = mJoints[link.mOriginJointID];
+        auto joint2 = mJoints[link.mTargetJointID];
         /* Calculate joint constraints */
-        auto thisBoneOuterToInnerUV = (link.mPos - link2.mPos).normalize(); // Unit vector from outer to inner
+        auto thisBoneOuterToInnerUV = (joint.mPos - joint2.mPos).normalize(); // Unit vector from outer to inner
 
         ARC::vec3 relativeHingeRotationAxis;
         if(i > 0) {
-            auto& link3 = mLinks[i-1];
-            auto orientation = vec3::toRotation(link.mPos, link3.mPos); // Direction of previous bone
-            relativeHingeRotationAxis = link.mHingeAxis.rotate(orientation); // Rotate the hinge axis
+            auto link2 = mLinks[i-1];
+            auto& joint3 = mJoints[link2.mOriginJointID];
+            auto orientation = vec3::toRotation(joint.mPos, joint3.mPos); // Direction of previous bone
+            relativeHingeRotationAxis = joint.mHingeAxis.rotate(orientation); // Rotate the hinge axis
         } else { // Basebone
-            relativeHingeRotationAxis = link.mHingeAxis;
+            relativeHingeRotationAxis = joint.mHingeAxis;
         }
 
         thisBoneOuterToInnerUV = thisBoneOuterToInnerUV.projOntoPlane(relativeHingeRotationAxis);
 
         // TODO rotation limits
         if(
-            !ARC::approxEqual(link.mCWAngleLimit, -M_PI) &&
-            !ARC::approxEqual(link.mCCWAngleLimit, M_PI)
+            !ARC::approxEqual(joint.mCWAngleLimit, -M_PI) &&
+            !ARC::approxEqual(joint.mCCWAngleLimit, M_PI)
         ) {
 
         }
 
-        link.mPos = link2.mPos + thisBoneOuterToInnerUV * link.mLen;
+        joint.mPos = joint2.mPos + thisBoneOuterToInnerUV * link.mLen;
     }
-    fmt::print("Forward: {}\n", mLinks.back().mPos);
+    fmt::print("Forward: {}\n", mJoints.back().mPos);
 }
 
 void FABRIK::Backward(const vec3& root) {
     /* Backward reaching stage */
     /* Set root to its initial position */
-    mLinks.front().mPos = root;
+    mJoints.front().mPos = root;
     /* Walk forwards through the chain */
     for(auto i = 0u; i < mLinks.size() - 1; ++i) {
         auto link = mLinks[i];
-        auto &link2 = mLinks[i+1];
+        auto joint = mJoints[link.mOriginJointID];
+        auto &joint2 = mJoints[link.mTargetJointID];
 
         /* Calculate joint constraints */
-        auto thisBoneInnerToOuterUV = (link2.mPos - link.mPos).normalize(); // Unit vector from inner to outer
+        auto thisBoneInnerToOuterUV = (joint2.mPos - joint.mPos).normalize(); // Unit vector from inner to outer
 
         ARC::vec3 relativeHingeRotationAxis;
         if(i > 0) {
-            auto& link3 = mLinks[i-1];
-            auto orientation = vec3::toRotation(link3.mPos, link.mPos); // Direction of previous bone
-            relativeHingeRotationAxis = link.mHingeAxis.rotate(orientation); // Rotate the hinge axis
+            auto link2 = mLinks[i-1];
+            auto& joint3 = mJoints[link2.mOriginJointID];
+            auto orientation = vec3::toRotation(joint3.mPos, joint.mPos); // Direction of previous bone
+            relativeHingeRotationAxis = joint.mHingeAxis.rotate(orientation); // Rotate the hinge axis
         } else { // Basebone
-            relativeHingeRotationAxis = link.mHingeAxis;
+            relativeHingeRotationAxis = joint.mHingeAxis;
         }
 
         // TODO WIP
@@ -92,8 +96,8 @@ void FABRIK::Backward(const vec3& root) {
 
         // TODO rotation limits
         if(
-            !ARC::approxEqual(link.mCWAngleLimit, -M_PI) &&
-            !ARC::approxEqual(link.mCCWAngleLimit, M_PI)
+            !ARC::approxEqual(joint.mCWAngleLimit, -M_PI) &&
+            !ARC::approxEqual(joint.mCCWAngleLimit, M_PI)
         ) {
             /*
             Vec3f relativeHingeReferenceAxis = m.times( thisBoneJoint.getHingeReferenceAxis() ).normalise();
@@ -114,39 +118,39 @@ void FABRIK::Backward(const vec3& root) {
             */
         }
 
-        link2.mPos = link.mPos + thisBoneInnerToOuterUV * link.mLen;
+        joint2.mPos = joint.mPos + thisBoneInnerToOuterUV * link.mLen;
     }
-    fmt::print("Backward: {}\n", mLinks.back().mPos);
+    fmt::print("Backward: {}\n", mJoints.back().mPos);
 }
 
 std::vector<vec3> FABRIK::Calculate(const Goal& target) {
-    auto root = mLinks.front().mPos;
+    auto root = mJoints.front().mPos;
     /* Check distance between root and target */
     auto dist = (target - root).norm();
 
     /* Check distance between end effector pn and the target t is greater than the tolerance */
-    auto diff = (target - mLinks.back().mPos).norm();
+    auto diff = (target - mJoints.back().mPos).norm();
     auto iter = 0u;
     /* Iterate until we are inside the tolerance, or we have iterated the max number of times */
     while(diff > mTolerance && iter < mIterLimit) {
         Forward(target);
         Backward(root);
-        diff = (target - mLinks.back().mPos).norm();
+        diff = (target - mJoints.back().mPos).norm();
         ++iter;
         fmt::print("Iter {}, diff = {}\n", iter, diff);
     }
 
     /* Return result */
     std::vector<vec3> ret;
-    for(auto link : mLinks) {
-        ret.emplace_back(link.mPos);
+    for(auto joint : mJoints) {
+        ret.emplace_back(joint.mPos);
     }
     return ret;
 }
 
 FABRIK::Goal FABRIK::ForwardKinematics() const {
-    FABRIK::Goal endEff = mLinks.back().mPos;
-    for(const auto& link: mLinks) {
+    FABRIK::Goal endEff = mJoints.back().mPos;
+    for(const auto& joint: mJoints) {
         // TODO orientation
     }
     return endEff;
